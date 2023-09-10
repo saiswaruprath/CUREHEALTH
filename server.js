@@ -175,12 +175,12 @@ app.post('/updateUrls', async (req, res) => {
 
 
 // Load the Google Cloud Storage service account credentials
-const keyFile = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS)
+const keyFile = process.env.GOOGLE_APPLICATION_CREDENTIALS
 const projectID = process.env.GCS_PROJECT_ID;
 
 const storage = new Storage({
   projectID, // Your project ID
-  keyFilename: keyFile, // Path to your service account JSON key file
+  credentials: JSON.parse(keyFile), // Path to your service account JSON key file
 });
 
 // Endpoint to fetch data from the Google Cloud Storage JSON file
