@@ -179,7 +179,7 @@ const keyFile = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS)
 const projectID = process.env.GCS_PROJECT_ID;
 
 const storage = new Storage({
-  projectId, // Your project ID
+  projectID, // Your project ID
   keyFilename: keyFile, // Path to your service account JSON key file
 });
 
