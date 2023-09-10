@@ -60,9 +60,10 @@ app.use((req, res, next) => {
 
 
 // // Replace with the path to your service account JSON key file
-import serviceAccountKey from './newimages/sjsu-rf-ohana-c748b70be079.json' assert { type: "json" };
+// import serviceAccountKey from './newimages/sjsu-rf-ohana-c748b70be079.json' assert { type: "json" };
 import { title } from 'process';
 
+const serviceAccountKey = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS)
 // // Initialize Firestore
  const firestore = new Firestore({ projectId: serviceAccountKey.project_id, credentials: serviceAccountKey });
 
