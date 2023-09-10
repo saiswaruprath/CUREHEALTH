@@ -1,0 +1,117 @@
+
+
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: auto;
+  padding: 20px;
+}
+
+.App  h3{
+
+  background-color: gold;
+
+  align-items: auto;
+
+}
+
+
+.App p{
+  display: flex;
+  background-color: lightblue;
+  flex-direction: column;
+  align-items: auto;
+  padding: 20px; 
+}  
+
+.results {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    width: 100%;
+  }
+
+.article-card {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px;
+  max-height: 500px; /* Adjust this value to control the default height */
+  overflow: scroll;
+   transition:all                                
+     /* max-height 0.3s ease-in-out;  */ 
+}
+
+.article-card h5{
+  background-color:lightyellow;
+  align-items: auto;
+}
+
+.article-card p{
+ 
+  background-color:lightskyblue;
+  align-items: auto;
+ 
+}
+
+
+
+.article-card h2{
+  background-color:lightyellow;
+  align-items: auto;
+}
+
+
+.article-card h4{
+  background-color:chartreuse;
+  align-items: auto;
+}
+
+
+.answers p{
+  background-color:aquamarine;
+  align-items: auto;
+}
+
+
+.details h4{
+  background-color:lightyellow;
+  align-items: auto;
+}
+
+
+.details p{
+   background-color: yellow;
+   align-items: center;
+}
+
+.details li{
+  background-color:aquamarine;
+  align-items: center;
+}
+
+
+
+
+.Context-Search-Display
+{
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px;
+  max-height: 500px; /* Adjust this value to control the default height */
+  overflow: scroll;
+   transition:all  
+}
+
+
+/* ButtonStyles.css */
+.button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 5px;
+  text-decoration: none;
+  margin: 10px;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}

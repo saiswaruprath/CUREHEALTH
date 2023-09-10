@@ -1,0 +1,396 @@
+import React, { useState } from 'react';
+import './upload.css'
+import axios from 'axios';
+
+
+function ResourceUploadForm() {
+  const [message, setMessage] = useState('');
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [searchEmail, setSearchEmail] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  
+
+  const handleSearchInputChange = (event) => {
+    setSearchEmail(event.target.value);
+  };
+
+  const handleSearchSubmit = async () => {
+     try {
+      const response = await fetch(`/search?userid=${searchEmail}`);
+      const data = await response.json();
+      setSearchResults(data);
+      console.log(data)
+    
+      
+     } catch (error) {
+       console.error('Error fetching search results:', error);
+    }
+   };
+
+  const [resourceData, setResourceData] = useState({
+    topic: '',
+    type: '',
+    subject: '',
+    content: '',
+    userid: '',
+    images: [],
+    pdfs: [],
+    videos: [],
+    documents: [],
+    urls: [],
+  });
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setResourceData((prevData) => ({
+      ...prevData,
+      [name]: value,
+      date: new Date().toLocaleDateString(), // Capture the current date
+      time: new Date().toLocaleTimeString(), // Capture the current time
+    }));
+  };
+
+
+
+
+const handleFileChange = (event, fileType) => {
+  if (fileType === 'urls') {
+    const urls = event.target.value.split(',').map(url => url.trim());
+    setResourceData(prevData => ({
+      ...prevData,
+      urls: urls,
+    }));
+  } else {
+    const files = Array.from(event.target.files);
+    const newUploadedFiles = files.map(file => ({ type: fileType, name: file.name }));
+    setUploadedFiles(prevFiles => [...prevFiles, ...newUploadedFiles]);
+
+    // Convert each file to an object with necessary details
+    const processedFiles = files.map((file) => ({
+      name: file.name,
+      type: fileType,
+      file: file,
+    }));
+
+    setResourceData(prevData => ({
+      ...prevData,
+      [fileType]: [...prevData[fileType], ...processedFiles],
+    }));
+  }
+};
+
+
+
+
+  
+
+
+  const handleClear = () => {
+    setResourceData({
+      topic: '',
+      type: '',
+      subject: '',
+      content: '',
+      userid: '',
+      images: [],
+      pdfs: [],
+      videos: [],
+      documents: [],
+      urls: [],
+
+    });
+    setMessage('');
+    setUploadedFiles([]);    
+  }
+
+
+
+  const handleSubmit = async () => {
+
+    try {
+     
+      await fetch('api/upload', {
+        method: 'POST',
+        headers:{
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(resourceData)
+      })
+       
+      if (resourceData.urls.length > 0) {
+        const urlData = {
+          topic: resourceData.topic,
+          type: resourceData.type,
+          urls: resourceData.urls,
+        };
+        await axios.post('/updateUrls', urlData);
+      }
+
+      handleClear()
+      setMessage('Thank you for contributing! Your data was uploaded successfully!');
+      console.log('JSON data uploaded successfully.');
+
+    } catch (error) {
+      console.error('Error uploading JSON data:', error);
+      setMessage('Error uploading data!')
+    }
+
+
+
+  };
+
+  return (
+    <div className="upload-resource-page">
+    <h2>Want to Contribute? You have come to the right place!</h2>
+    <p>Please provide the details for the options below and click on publish to add your resource.
+You can also search for your resource with your user ID below and check the details.</p> 
+
+    <div className="form-group">
+      {/* ... Your other input fields for topic, type, etc. */}
+      <label htmlFor="resourceTopic">Resource Topic</label>
+          <i className="fas fa-user"></i>
+          <input
+            type="text"
+            id="resourceTopic"
+            name="topic"
+            value={resourceData.topic}
+            onChange={handleInputChange}
+            required
+          />
+          
+
+          <label htmlFor="resourceType">Resource Type</label>
+          <input
+            type="text"
+            id="resourceType"
+            name="type"
+            value={resourceData.type}
+            onChange={handleInputChange}
+            required
+          />
+
+
+         <label htmlFor="subject">Subject</label>
+          <input
+            type="text"
+            id="subject"
+            name="subject"
+            value={resourceData.subject}
+            onChange={handleInputChange}
+            required
+          />
+
+
+        <label htmlFor="content">Content to Write</label>
+          <textarea
+            id="content"
+            name="content"
+            value={resourceData.content}
+            onChange={handleInputChange}
+            required
+          />
+
+        <label htmlFor="userid">User ID (Email)</label>
+          <input
+            type="email"
+            id="userid"
+            name="userid"
+            value={resourceData.userid}
+            onChange={handleInputChange}
+            required
+          />
+
+
+      
+      {/* File upload section */}
+      <label htmlFor="files">Upload Files</label>
+      <div className="file-upload-icons">
+  
+        <label htmlFor="imageInput" className="file-type-icon">
+      <i className="far fa-image"></i>
+      <input
+        type="file"
+        id="imageInput"
+        multiple accept=".jpg, .jpeg, .png"
+        onChange={(e) => handleFileChange(e, "images")}
+        style={{ display: 'none' }}
+      />
+      <span>Images</span>
+    </label>
+
+    <br />
+
+    <label htmlFor="pdfInput" className="file-type-icon">
+      <i className="far fa-file-pdf"></i>
+      <input
+        type="file"
+        id="pdfInput"
+        multiple accept=".pdf"
+        onChange={(e) => handleFileChange(e, "pdfs")}
+        style={{ display: 'none' }}
+      />
+      <span>PDFs</span>
+    </label>
+
+    <br />
+
+    <label htmlFor="videoInput" className="file-type-icon">
+      <i className="far fa-file-video"></i>
+      <input
+        type="file"
+        id="videoInput"
+        multiple accept=".mp4"
+        onChange={(e) => handleFileChange(e, "videos")}
+        style={{ display: 'none' }}
+      />
+      <span>Videos</span>
+    </label>
+
+    <br />
+
+    <label htmlFor="docInput" className="file-type-icon">
+      <i className="far fa-file-alt"></i>
+      <input
+        type="file"
+        id="docInput"
+       multiple accept=".doc, .docx"
+        onChange={(e) => handleFileChange(e, "documents")}
+        style={{ display: 'none' }}
+      />
+      <span>Documents</span>
+    </label>
+    
+    <br />
+
+    <label htmlFor="urlInput" className="file-type-icon">
+      <i className="fas fa-link"></i>
+      <input
+        type="url"
+        id="urlInput"
+        onChange={(e) => handleFileChange(e, "urls")}
+        placeholder="Enter URLs separated by commas"
+      
+      />
+      <span>URLs</span>
+    </label>
+
+      </div>
+      <div className="uploaded-files">
+        <h4>Uploaded Files:</h4>
+        <ul>
+          {uploadedFiles.map((file, index) => (
+            <li key={index}>{`${file.type}: ${file.name}`}</li>
+          ))}
+        </ul>
+      </div>
+
+      <button onClick={handleSubmit}>Publish</button>
+
+      <br />
+      <br />
+
+      <button onClick={handleClear}>Clear</button>
+      {message && <p>{message}</p>}
+       
+       <br />
+       <br />
+
+       <div className="search-section">
+        <h3>User's History</h3>
+        <label htmlFor="searchEmail">Enter UserID and click on Search</label>
+        <input
+          type="email"
+          id="searchEmail"
+          value={searchEmail}
+          onChange={handleSearchInputChange}
+        />
+        <button onClick={handleSearchSubmit}>Search</button>
+      </div> 
+
+{searchResults.length > 0 && (
+ <div classname="search-results-container">
+    <h3>Search Results:</h3>
+    <ul>
+
+      {searchResults.map(result => (
+        <li key={result.userid} className="search-results-card">
+          <h3><strong>User ID:</strong> {result.userid}</h3>
+          <h3><strong>Topic:</strong> {result.topic}</h3>
+          <h3><strong>Type:</strong> {result.type}</h3>
+          <p><strong>Subject:</strong> {result.subject}</p>
+          <p><strong>Content:</strong> {result.content}</p>
+          <p><strong>Date:</strong> {result.date}</p>
+          <p><strong>Timestamp:</strong> {result.time}</p>
+          
+          {result.urls.length > 0 && (
+            <div>
+              <p><strong>URLs:</strong></p>
+              <ul>
+                {result.urls.map(url => (
+                  <li key={url}>{url}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+           {result.images.length > 0 && (
+            <div>
+              <p><strong>Images:</strong></p>
+              <ul>
+                {result.images.map(image => (
+                  <li key={image.name}>{image.name}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+           {result.pdfs.length > 0 && (
+            <div>
+              <p><strong>PDFs:</strong></p>
+              <ul>
+                {result.pdfs.map(pdf => (
+                  <li key={pdf.name}>{pdf.name}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+           {result.videos.length > 0 && (
+            <div>
+              <p><strong>Videos:</strong></p>
+              <ul>
+                {result.videos.map(video => (
+                  <li key={video.name}>{video.name}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+           {result.documents.length > 0 && (
+            <div>
+              <p><strong>Documents:</strong></p>
+              <ul>
+                {result.documents.map(document => (
+                  <li key={document.name}>{document.name}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+
+        </li>
+      ))}
+    </ul>
+   
+  </div>
+
+)}
+
+
+    </div>
+  </div>
+  
+  );
+}
+
+export default ResourceUploadForm;

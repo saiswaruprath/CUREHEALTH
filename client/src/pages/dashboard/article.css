@@ -1,0 +1,50 @@
+.sections-container {
+    display: flex;
+  }
+  
+  .section {
+    flex: 1;
+    padding: 20px;
+  }
+  
+  .articles-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .article {
+    width: 250px;
+    border: 1px solid #ccc;
+    padding: 10px;
+  }
+  
+  .article img {
+    width: 100%;
+    height: auto;
+  }
+  
+  .article h3 {
+    margin: 10px 0;
+  }
+
+  .article p {
+    margin: 10px 0;
+  }
+  
+  .scroll-button {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background-color: #fff;
+    color: #000;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
+  .scroll-button.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  
