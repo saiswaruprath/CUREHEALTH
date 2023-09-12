@@ -75,7 +75,7 @@ function ArticleDetails({ data }) {
 
       const { itemTitle } = useParams();
      
-      const newitem = data.find(item => item.title === itemTitle);
+      const newitem = data.find(item => item.title.includes(itemTitle));
     
       if (!newitem) {
         return <div>Article not found</div>;
