@@ -14,7 +14,7 @@ const BigSidebar = () => {
         }
       >
         <div className='content'>
-          <header>
+          <header className='p-0'>
           <img src={Ohana} alt="job hunt" className='img main-img' />
           {/* <Logo /> */}
           </header>

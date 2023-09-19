@@ -178,7 +178,7 @@ console.log(recentDocument)
           Search
           </Button>
         </InputGroup>
-      <label>
+      {/* <label>
         <input
           type="radio"
           value="search"
@@ -194,7 +194,7 @@ console.log(recentDocument)
         onChange={(e) => setContext(e.target.value)}
       />
       <button onClick={handleUpdate}>Search</button>
-     
+      */}
      
       {/* <p>{updateMessage}</p> */}
 
