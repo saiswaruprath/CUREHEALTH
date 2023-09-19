@@ -70,7 +70,7 @@ html {
 }
 
 body {
-  background: var(--backgroundColor);
+  background: var(--backgroundColor) !important;
   font-family: var(--bodyFont);
   font-weight: 400;
   line-height: 1.75;

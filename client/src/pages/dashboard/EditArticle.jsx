@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './editarticle.css'
 import { Link } from 'react-router-dom';
+import Stack from 'react-bootstrap/Stack';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
+import Button from 'react-bootstrap/Button';
 
 
 
@@ -143,24 +147,37 @@ console.log(recentDocument)
   return (
    
     <div className="App">
-        <h3>WELCOME TO THE CURATED SEARCH AND FILTER RESOURCE CENTER!</h3>  
+        <Stack gap={1}>
+          <div className="mb-2"><h3>WELCOME TO THE CURATED SEARCH AND FILTER RESOURCE CENTER!</h3></div>
+          <div className=""><small>Please use below search option and provide the details of the topic of your search. Our application will match and display the top five resource for your needs.</small></div>
+          <div className="mb-2"><small>You can also filter based on the resource topic below and check for available resources.</small></div>
+        </Stack>
+        {/* <h3>WELCOME TO THE CURATED SEARCH AND FILTER RESOURCE CENTER!</h3>  
         <p>Please use below search option and provide the details of the topic of your search. Our application will match and display the top five resource for your needs.</p> 
-        <p>You can also filter based on the resource topic below and check for available resources.</p>
+        <p>You can also filter based on the resource topic below and check for available resources.</p> */}
         <div className="filters">
-        <label htmlFor="resourceTopic">Resource Topic:</label>
-        <select id="resourceTopic" onChange={handleResourceTopicChange}>
-          <option value="">All</option>
-          <option value="Mental Health">Mental Health</option>
-          <option value="Substance Use">Substance Use</option>
-          <option value="Domestic Violence">Domestic Violence</option>
-          <option value="Native Hawaains">Native Hawaiians</option>
-          </select>
-          </div>
+          <Stack direction="horizontal" gap={3} className='align-items-center w-50 mt-2'>
+          <Form.Label htmlFor="resourceTopic" className='text-nowrap m-0'>Resource Topic:</Form.Label>
+          <Form.Select aria-label="Filter By Resource Topic" id="resourceTopic" onChange={handleResourceTopicChange}>
+            <option value="">All</option>
+            <option value="Mental Health">Mental Health</option>
+            <option value="Substance Use">Substance Use</option>
+            <option value="Domestic Violence">Domestic Violence</option>
+            <option value="Native Hawaains">Native Hawaiians</option>
+          </Form.Select>
+          </Stack>
+        </div>
 
-          <br />
-          <br />
-          <br />
-
+        <InputGroup size="lg" className='mt-2'>
+          <InputGroup.Text id="search-input-group"><i class="bi bi-search"></i></InputGroup.Text>
+          <Form.Control
+            aria-label="Search Box"
+            aria-describedby="inputGroup-sizing-sm"
+          />
+          <Button variant="outline-primary" id="search-button" onClick={handleUpdate}>
+          Search
+          </Button>
+        </InputGroup>
       <label>
         <input
           type="radio"
