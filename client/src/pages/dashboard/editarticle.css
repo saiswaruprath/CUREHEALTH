@@ -5,6 +5,7 @@
   flex-direction: column;
   align-items: auto;
   padding: 10px;
+  /* max-width: 80vw; */
 }
 
 .App  h3{
@@ -12,19 +13,23 @@
 }
 
 
-.App p{
+/* .App p{
   display: flex;
   background-color: lightblue;
   flex-direction: column;
   align-items: auto;
   padding: 20px; 
-}  
+}   */
 
 .results {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
     width: 100%;
+    /* display: flex; */
+    /* flex-direction: row; */
+    /* flex-wrap: wrap; */
+    justify-content: space-between;
   }
 
 .article-card {
@@ -85,20 +90,6 @@
   align-items: center;
 }
 
-
-
-
-.Context-Search-Display
-{
-  border: 1px solid #ccc;
-  padding: 10px;
-  margin: 10px;
-  max-height: 500px; /* Adjust this value to control the default height */
-  overflow: scroll;
-   transition:all  
-}
-
-
 /* ButtonStyles.css */
 .button {
   display: inline-block;
@@ -110,4 +101,27 @@
   margin: 10px;
   font-size: 16px;
   transition: background-color 0.3s ease;
+}
+
+.min-height--50{
+  min-height: 50px;
+}
+
+.border-bottom--075{
+  border-bottom:solid 0.75px var(--primary-500);
+}
+
+.btn-primary > a{
+  color: white;
+  text-decoration: none;
+}
+
+.custom-styled-card{
+  height: 11em;
+  overflow-y: auto;
+}
+
+.custom-card--container{
+  /* width: calc(100% / 3.25); */
+  /* height: 24em; */
 }

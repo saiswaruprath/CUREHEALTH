@@ -319,3 +319,20 @@ ul {
     margin-right: 0.5rem;
   }
 }
+
+/* Scrollbar */
+::-webkit-scrollbar{
+  width: 0.5em;
+  cursor:pointer;
+}
+
+::-webkit-scrollbar-track{
+  -webkit-box-shadow: inset 0 0 8px rgba(0,0,0,0.0);
+}
+
+::-webkit-scrollbar-thumb{
+  background-color: rgba(0,0,0,.5);
+  border: 1px solid slategrey;
+  border-radius: 4px;
+  cursor:pointer;
+}

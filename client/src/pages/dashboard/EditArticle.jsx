@@ -5,7 +5,7 @@ import Stack from 'react-bootstrap/Stack';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
-
+import Card from 'react-bootstrap/Card';
 
 
 function EditArticle() {
@@ -114,10 +114,20 @@ function EditArticle() {
     : `https://${item.thumbnails}`;
 
 
-    return (
-  
-      
-        <div className="article-card"> 
+    return (  
+      <>
+      <Card className='custom-card--container'>
+      <Card.Img variant="top" src={imageUrl} className='border-bottom--075 min-height--50'/>
+      <Card.Body>
+        <Card.Title>Title: {item.title}</Card.Title>
+        <Card.Title>Topic: {item.topic}</Card.Title>
+        <Card.Text className='custom-styled-card'>
+          {item.summary}
+        </Card.Text>
+        <Button variant="primary"><Link to={`/details/${item.title}`}>Know More</Link></Button>
+      </Card.Body>
+      </Card>
+        {/* <div className="article-card"> 
         <a href={item.url} target="_blank" rel="noopener noreferrer">
           Source Link
         </a>
@@ -139,7 +149,8 @@ function EditArticle() {
 
         <Link to={`/details/${item.title}`} className="button">Open Details</Link>
         
-      </div>
+      </div> */}
+      </>
     );
 };
 
@@ -174,11 +185,11 @@ console.log(recentDocument)
             aria-label="Search Box"
             aria-describedby="inputGroup-sizing-sm"
           />
-          <Button variant="outline-primary" id="search-button" onClick={handleUpdate}>
+          <Button variant="outline-primary" id="search-button" className='z-0' onClick={handleUpdate}>
           Search
           </Button>
         </InputGroup>
-      {/* <label>
+      <label>
         <input
           type="radio"
           value="search"
@@ -194,11 +205,11 @@ console.log(recentDocument)
         onChange={(e) => setContext(e.target.value)}
       />
       <button onClick={handleUpdate}>Search</button>
-      */}
+     
      
       {/* <p>{updateMessage}</p> */}
 
-      <div className='Context-Search-Display'>
+      <div className='my-2'>
         {!recentDocumentLoading && searchPerformed ? (
           recentDocument ? (
            <>
@@ -249,12 +260,6 @@ console.log(recentDocument)
           <p>Please wait while we fetch the best possible match for your search...</p>
         )}
    </div>
-
-
-             <br />
-
-             <br />
-
     <div className="results">
         {data
           .filter(item => !selectedFilterTopic || item.topic.toLowerCase().includes(selectedFilterTopic.toLowerCase()))

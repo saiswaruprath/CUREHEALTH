@@ -143,7 +143,36 @@ const handleFileChange = (event, fileType) => {
     <div className="upload-resource-page">
     <h2>Want to Contribute? You have come to the right place!</h2>
     <p>Please provide the details for the options below and click on publish to add your resource.
-You can also search for your resource with your user ID below and check the details.</p> 
+    <br/>
+    You can also search for your resource with your user ID below and check the details.</p> 
+
+    <div class="row g-3 mb-4">
+    <div class="form-floating col">        
+        <input type="text" class="form-control" id="formGroupResourceTopic" placeholder="Enter Resource Topic" aria-label="Resource Topic" />
+        <label for="formGroupResourceTopic" class="">Resource Topic</label>
+    </div>
+    <div class="form-floating col">        
+        <input type="text" class="form-control" id="formGroupResourceType" placeholder="Enter Resource Type" aria-label="Resource Type" />
+        <label for="formGroupResourceType" class="">Resource Type</label>
+    </div>
+    </div>
+    <div class="form-floating col-12 mb-4">
+        <input type="text" class="form-control" id="formGroupSubject" placeholder="Enter Subject Here"/>
+        <label for="formGroupSubject" class="">Subject</label>
+    </div>
+    <div class="form-floating col-12 mb-4">
+        <textarea class="min-height--100 form-control" id="formGroupContent" placeholder="Enter Content Here" />
+        <label for="formGroupContent" class="form-label">Content</label>
+    </div>
+    <div class="form-floating col-12 mb-4">
+        <input type="text" class="form-control" id="formGroupUser" placeholder="Enter User ID Here"/>
+        <label for="formGroupUser" class="">User ID / Email</label>
+    </div>
+    <div class="mb-3">
+      {/* <label for="formGroupFile" class="form-label">File Upload</label> */}
+      <input class="form-control" type="file" id="formGroupFile" />
+    </div>
+        
 
     <div className="form-group">
       {/* ... Your other input fields for topic, type, etc. */}
