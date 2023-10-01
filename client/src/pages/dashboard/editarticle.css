@@ -4,12 +4,18 @@
   display: flex;
   flex-direction: column;
   align-items: auto;
-  padding: 10px;
+  padding: 0px;
   /* max-width: 80vw; */
+  height: calc(100vh - 110px);
+  
 }
 
-.App  h3{
-  align-items: auto;
+.App  h2{
+  display: flex;
+  background-color: #2cb1bc2b;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
 }
 
 
@@ -124,4 +130,8 @@
 .custom-card--container{
   /* width: calc(100% / 3.25); */
   /* height: 24em; */
+}
+
+.custom-flex{
+  flex:unset
 }
