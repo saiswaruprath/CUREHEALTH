@@ -61,6 +61,11 @@ function EditArticle() {
     setisBrowseKnowledgeArticleClicked(toggleMode);
   }
 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleUpdate();
+    }
+  }
 
   useEffect(() => {
     let pollTimer;
@@ -164,40 +169,39 @@ function EditArticle() {
   return (
 
     <div className="App">
-      <Stack className='custom-flex' gap={1}>
-        {/* <div className="mb-2"><h2>WELCOME TO THE CURATED SEARCH AND FILTER RESOURCE CENTER!</h2></div> */}
-        <div className="mb-2"><h2>Search and Filter Resources</h2></div>
-        <div className=""><small>Please use below search option and provide the details of the topic of your search. Our application will match and display the top five resource for your needs.</small></div>
-        <div className="mb-2"><small>You can also filter based on the resource topic below and check for available resources.</small></div>
-      </Stack>
-      {/* <h3>WELCOME TO THE CURATED SEARCH AND FILTER RESOURCE CENTER!</h3>  
-        <p>Please use below search option and provide the details of the topic of your search. Our application will match and display the top five resource for your needs.</p> 
-        <p>You can also filter based on the resource topic below and check for available resources.</p> */}
-      <div className="filters">
-        <Stack direction="horizontal" gap={3} className='align-items-center w-50 mt-2'>
-          <Form.Label htmlFor="resourceTopic" className='text-nowrap m-0'>Resource Topic:</Form.Label>
-          <Form.Select aria-label="Filter By Resource Topic" id="resourceTopic" onChange={handleResourceTopicChange}>
-            <option value="">All</option>
-            <option value="Mental Health">Mental Health</option>
-            <option value="Substance Use">Substance Use</option>
-            <option value="Domestic Violence">Domestic Violence</option>
-            <option value="Native Hawaains">Native Hawaiians</option>
-          </Form.Select>
+      <div className="mb-2"><h2>Search and Filter Resources</h2></div>
+      <div className='container'>
+        <Stack className='custom-flex' gap={1}>
+          {/* <div className="mb-2"><h2>WELCOME TO THE CURATED SEARCH AND FILTER RESOURCE CENTER!</h2></div> */}
+          <div className=""><small>Please use below search option and provide the details of the topic of your search. Our application will match and display the top five resource for your needs.</small></div>
+          <div className="mb-2"><small>You can also filter based on the resource topic below and check for available resources.</small></div>
         </Stack>
-      </div>
+        <div className="filters">
+          <Stack direction="horizontal" gap={3} className='align-items-center w-50 mt-2'>
+            <Form.Label htmlFor="resourceTopic" className='text-nowrap m-0'>Resource Topic:</Form.Label>
+            <Form.Select aria-label="Filter By Resource Topic" id="resourceTopic" onChange={handleResourceTopicChange}>
+              <option value="">All</option>
+              <option value="Mental Health">Mental Health</option>
+              <option value="Substance Use">Substance Use</option>
+              <option value="Domestic Violence">Domestic Violence</option>
+              <option value="Native Hawaains">Native Hawaiians</option>
+            </Form.Select>
+          </Stack>
+        </div>
 
-      <InputGroup size="md" className='mt-2'>
-        <InputGroup.Text id="search-input-group"><i className="bi bi-search"></i></InputGroup.Text>
-        <Form.Control
-          aria-label="Search Box"
-          aria-describedby="inputGroup-sizing-sm"
-          onChange={(e) => setContext(e.target.value)}
-        />
-        <Button variant="primary" id="search-button" className='z-0' onClick={handleUpdate}>
-          Search
-        </Button>
-      </InputGroup>
-      {/* <label>
+        <InputGroup size="md" className='mt-2'>
+          <InputGroup.Text id="search-input-group"><i className="bi bi-search"></i></InputGroup.Text>
+          <Form.Control
+            aria-label="Search Box"
+            aria-describedby="inputGroup-sizing-sm"
+            onChange={(e) => setContext(e.target.value)}
+            onKeyDown={handleKeyDown}
+          />
+          <Button size='lg' variant="primary" id="search-button" className='z-0' onClick={handleUpdate}>
+            Search
+          </Button>
+        </InputGroup>
+        {/* <label>
         <input
           type="radio"
           value="search"
@@ -213,70 +217,69 @@ function EditArticle() {
         onChange={(e) => setContext(e.target.value)}
       />
       <button onClick={handleUpdate}>Search</button> */}
-      {/* <p>{updateMessage}</p> */}
-      <div className='my-2'>
-        {!recentDocumentLoading && searchPerformed ? (
-          recentDocument ? (
-            <>
+        {/* <p>{updateMessage}</p> */}
+        <div className='my-2'>
+          {!recentDocumentLoading && searchPerformed ? (
+            recentDocument ? (
+              <>
 
-              {Object.keys(recentDocument).map((topic, index) => {
-                if (topic.toLowerCase().includes(context.toLowerCase())) {
-                  return (
-                    <div key={index} >
-                      <h2>{topic}</h2>
-                      {recentDocument[topic].map((item, subIndex) => (
-                        <div key={subIndex} className='article-card'>
-                          <h4>Title: {item.title}</h4>
-                          <h3>Related topic: {item.topic}</h3>
-                          <img src={item.thumbnails} alt="thumbnail" width="250" height="170" />
-                          <p>Summary: {item.summary}</p>
-                          <a href={item.url} target="_blank" rel="noopener noreferrer">
-                            Source Link
-                          </a>
-                          {item.questions && (
+                {Object.keys(recentDocument).map((topic, index) => {
+                  if (topic.toLowerCase().includes(context.toLowerCase())) {
+                    return (
+                      <div key={index} >
+                        <h2>{topic}</h2>
+                        {recentDocument[topic].map((item, subIndex) => (
+                          <div key={subIndex} className='article-card'>
+                            <h4>Title: {item.title}</h4>
+                            <h3>Related topic: {item.topic}</h3>
+                            <img src={item.thumbnails} alt="thumbnail" width="250" height="170" />
+                            <p>Summary: {item.summary}</p>
+                            <a href={item.url} target="_blank" rel="noopener noreferrer">
+                              Source Link
+                            </a>
+                            {item.questions && (
 
-                            <div>
-                              {Object.entries(item.questions).map(([questionText, answers], questionIndex) => (
-                                <div key={questionIndex}>
-                                  <p><strong>Question:</strong> {questionText}</p>
-                                  {answers.length>1 && answers.map((answerObj, answerIndex) => (
-                                    <div key={answerIndex} className="answers">
-                                      <p><strong>Answer:</strong> {answerObj.answer}</p>
+                              <div>
+                                {Object.entries(item.questions).map(([questionText, answers], questionIndex) => (
+                                  <div key={questionIndex}>
+                                    <p><strong>Question:</strong> {questionText}</p>
+                                    {answers.length > 1 && answers.map((answerObj, answerIndex) => (
+                                      <div key={answerIndex} className="answers">
+                                        <p><strong>Answer:</strong> {answerObj.answer}</p>
 
-                                    </div>
-                                  ))}
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  );
-                }
-                return null;
-              })}
-            </>
+                                      </div>
+                                    ))}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  }
+                  return null;
+                })}
+              </>
 
+            ) : (
+              <p>No matching documents found.</p>
+            )
           ) : (
-            <p>No matching documents found.</p>
-          )
-        ) : (
-          null
-        )}
+            null
+          )}
+        </div>
+        <Button variant='primary' className='mt-auto mb-4' onClick={(e) => toggleArticleMode()}>{isBrowseKnowledgeArticleClicked !== true ? 'Browse' : 'Hide'} Knowledge Articles</Button>
+        {isBrowseKnowledgeArticleClicked && <div className="results">
+          {data
+            .filter(item => !selectedFilterTopic || item.topic.toLowerCase().includes(selectedFilterTopic.toLowerCase()))
+            .map((item, index) => (
+              <ArticleCard key={index} item={item} />
+            ))}
+        </div>}
       </div>
-      <Button variant='primary' className='mt-auto mb-4' onClick={(e)=>toggleArticleMode()}>{isBrowseKnowledgeArticleClicked!==true? 'Browse': 'Hide'} Knowledge Articles</Button>
-      {isBrowseKnowledgeArticleClicked && <div className="results">
-        {data
-          .filter(item => !selectedFilterTopic || item.topic.toLowerCase().includes(selectedFilterTopic.toLowerCase()))
-          .map((item, index) => (
-            <ArticleCard key={index} item={item} />
-          ))}
-      </div>}
     </div>
   );
 }
 
 export default EditArticle;
-
-

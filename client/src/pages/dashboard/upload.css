@@ -1,104 +1,94 @@
 .upload {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  
-.upload-resource-page h2{
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.upload-resource-page{
+  overflow: auto;
+  height: calc(100vh - 110px);
+}
+
+.height-unset{
+  height: unset !important;
+}
+
+.upload-resource-page h2 {
   display: flex;
   /* background-color: gold; */
-  background-color: #2cb1bc2b;
+  /* background-color: #2cb1bc2b; */
+  background-color: var(--green-light);
   flex-direction: column;
   align-items: center;
   padding: 20px;
-}  
+}
 
-
-.upload-resource-page h3{
-  display: flex;
-  background-color: gold;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-}  
-
-
-.upload-resource-page p{
+.upload-resource-page p {
   /* background-color: lightblue; */
   flex-direction: column;
   align-items: center;
   padding: 0 0;
   max-width: unset;
-}  
+}
 
+.form-group {
+  margin-bottom: 20px;
+}
 
-  /* .upload-form {
-    display: flex;
-    flex-direction: column;
-  } */
-  
-  .form-group {
-    margin-bottom: 20px;
-  }
-  
-  .form-group label {
-    font-weight: bold;
-  }
-  
-  .form-group input,
-  .form-group textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .form-group textarea {
-    resize: vertical;
-  }
-  
-  .form-group input[type='file'] {
-    cursor: pointer;
-  }
-  
-  .file-icons[type='file'] {
-    color: coral;
-    cursor: pointer;
-  }
-  button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
+.form-group label {
+  font-weight: bold;
+}
 
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
 
-.search-section{
+.form-group textarea {
+  resize: vertical;
+}
+
+.form-group input[type="file"] {
+  cursor: pointer;
+}
+
+.file-icons[type="file"] {
+  color: coral;
+  cursor: pointer;
+}
+button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.search-section {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.search-section h2{
-background-color: yellow;
+.search-section h2 {
+  background-color: var(--green-light);
+  flex-direction: column;
   align-items: center;
+  padding: 20px;
+  width: 100%;
 }
-
-.search-section h3{
-  background-color: yellow;
-    align-items: center;
-  }
-
-  .search-section label {
-    font-weight: bold;
-    background-color: chocolate;
-  }  
+/* .search-section label {
+  font-weight: bold;
+  background-color: chocolate;
+} */
 /* Other styles */
 
 /* Add this CSS to your existing stylesheet */
@@ -124,14 +114,12 @@ background-color: yellow;
   color: #e74c3c; /* Change the hover color as desired */
 }
 
-
 .search-results-container {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
   padding: 20px;
 }
-
 
 .search-results-card {
   border: 1px solid #ccc;
@@ -142,43 +130,44 @@ background-color: yellow;
   flex: 1;
   min-width: 300px;
 }
-  
-  /* Additional styles for list items, headings, etc. */
-  .search-results-card h3 {
-    font-size: 20px;
-    margin-bottom: 10px;
-    background-color: lightgoldenrodyellow;
-  }
 
-  .search-results-card ul {
-    list-style-type: none;
-    padding: 0;
-  }
+/* Additional styles for list items, headings, etc. */
+.search-results-container h3 {
+  background-color: var(--green-light);
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  width: 100%;
+}
 
-  .search-results-card p {
-    list-style-type: none;
-    padding: 0;
-    background-color: orange;
-  }
+.search-results-card ul {
+  list-style-type: none;
+  padding: 0;
+}
 
-  .search-results-card li {
-    margin-bottom: 15px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: #fff;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-  }
+.search-results-card p {
+  list-style-type: none;
+  padding: 0;
+  background-color: orange;
+}
 
-  .min-height--75{
-    min-height: 75px !important;
-  }
-  
-  .form-floating.col>label{
-    left:4px;
-  }
+.search-results-card li {
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
 
-  .form-floating>label{
-    z-index: 0;
-  }
+.min-height--75 {
+  min-height: 75px !important;
+}
 
+.form-floating.col > label {
+  left: 4px;
+}
+
+.form-floating > label {
+  z-index: 0;
+}
