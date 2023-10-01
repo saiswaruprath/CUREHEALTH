@@ -339,3 +339,7 @@ ul {
   cursor:pointer;
   height: 50px;
 }
+
+a.nav-link.active{
+  background: var(--grey-50);
+}
