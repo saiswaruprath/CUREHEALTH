@@ -187,7 +187,7 @@ const storage = new Storage({
 app.get('/api/data', async (req, res) => {
   try {
     const bucketName = 'context_data1'; // Replace with your bucket name
-    const fileName = 'new_data1.json'; // Replace with your JSON file name
+    const fileName = 'article_data.json'; // Replace with your JSON file name
 
     const bucket = storage.bucket(bucketName);
     const file = bucket.file(fileName);

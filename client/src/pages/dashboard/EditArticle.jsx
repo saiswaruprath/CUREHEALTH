@@ -130,12 +130,12 @@ function EditArticle() {
         <Card className='custom-card--container'>
           <Card.Img variant="top" src={imageUrl} height={200} className='border-bottom--075 min-height--50' />
           <Card.Body>
-            <Card.Title>Title: {item.title}</Card.Title>
-            <Card.Title>Topic: {item.topic}</Card.Title>
+            <Card.Title>{item.title}</Card.Title>
+            <Card.Subtitle>{item.topic}</Card.Subtitle>
             <Card.Text className='custom-styled-card'>
               {item.summary}
             </Card.Text>
-            <Button variant="primary"><Link to={`/details/${item.title}`}>Know More</Link></Button>
+            <Button variant="primary"><Link to={`/details/${item.title}`} onClick={()=> localStorage.setItem('article-title', item.title)}>Know More</Link></Button>
           </Card.Body>
         </Card>
         {/* <div className="article-card"> 
