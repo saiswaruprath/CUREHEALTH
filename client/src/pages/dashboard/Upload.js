@@ -224,7 +224,7 @@ function ResourceUploadForm() {
           <Form.Control
             aria-label="Upload box"
             aria-describedby="inputGroup-sizing-sm"
-            disabled="true"
+            disabled={true}
             placeholder="Select File Type to Upload:"
           />
           <Button
