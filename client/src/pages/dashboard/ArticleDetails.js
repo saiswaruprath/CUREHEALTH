@@ -73,7 +73,9 @@ function ArticleDetails({ data }) {
           }, [searchPerformed, recentDocumentLoading, customQuestion]);
 
 
-      const { itemTitle } = useParams();
+      // const { itemTitle } = useParams();
+      const itemTitle  = localStorage.getItem('article-title');;
+      console.log(itemTitle);
      
       const newitem = data.find(item => item.title.includes(itemTitle));
     

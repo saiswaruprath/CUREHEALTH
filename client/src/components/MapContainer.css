@@ -1,0 +1,266 @@
+.map-container {
+    width: 100%;
+    height: 500px;
+    position: relative;
+  }
+  
+  .map-marker {
+    font-size: 24px;
+    color: red;
+  }
+  
+  .search-controls {
+    margin-top: 20px;
+  }
+  
+  .findtreatment{
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+  }
+  
+  .findtreatment-filter{
+    display: flex;
+    height: auto;
+    width:45%;
+  }
+  
+  .findtreatment-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    padding: 20px 20px;
+    right: 20px;
+    position: relative;
+    justify-content: space-around;
+    flex-wrap: wrap;
+  }
+  
+  .findtreatment-location--container{
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    /* gap: 12px; */
+    border:solid black 1px;
+    border-radius: 8px;
+    padding: 20px 40px;
+    width: 35%;
+    min-width: 300px;
+  }
+  .findtreatment-location--mcontainer{
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    /* gap: 12px; */
+    border:solid black 0.05px;
+    border-radius: 8px 0 0 8px;
+    padding: 10px 20px 10px 10px;
+    width: 35%;
+    min-width: 300px;
+    height: calc(100vh - 200px);
+    background: white;
+    overflow: scroll;
+  
+  }
+
+  .findtreatment-container--mapView{
+    position: relative;
+    overflow: scroll;
+    z-index: 0;
+  }
+  
+  .findtreatment-result--mtitle > h3{
+    text-align: unset;
+  }
+  
+  .findtreatment-location--seachbox > button{
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  }
+  
+  .findtreatment-location--seachbox-input{
+    height: 24px;
+    width: 100%;
+    padding-left: 8px;
+  }
+  
+  .findtreatment-location--seachbox-advanced{
+    display: flex;
+    flex-direction: row;
+    gap:20px;
+    align-content: baseline;
+    margin-bottom: 16px;
+  }
+  
+  .findtreatment-container--head h3{
+    margin: 8px 8px;
+    padding: 6px 12px;
+    border: solid black 0.75px;
+    border-radius: 8px;
+    background-color: white;
+  }
+  
+  .findtreatment-location--seachbox-advanced label{
+    display: flex;
+    align-items: center;
+    font-size: smaller;
+  }
+  
+  .findtreatment-location--seachbox-advanced [type='radio']{
+    width: 16px;
+    height: 16px;
+  }
+  
+  .findtreatment-location--seachbox-distance{
+    display: flex;
+    flex-direction: row;
+    gap:5px;
+  }
+  
+  .findtreatment-location--seachbox-distance select{
+    position: relative;
+    top: 1px;
+  }
+  
+  .findtreatment-location--action{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+  
+  hr{
+    width: calc(100% + 20px);
+  }
+  
+  /* button{
+    width: 88px;
+    height: 36px;
+    flex-shrink: 0;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.10);
+  } */
+  
+  .findtreatment-location--seachbox input{
+    border-radius: 8px 0 0 8px;
+    max-width: calc(100% - 60px);
+    text-overflow: ellipsis !important;
+    overflow: hidden;
+    white-space: nowrap;
+    height: 30px;
+  }
+  
+  .findtreatment-location--seachbox button{
+    position: relative;
+    bottom: 30px;
+    float: right;
+    left: 14px;
+    width: 75px;
+    border-radius: 0 8px 8px 0px;
+    height: 30px;
+    font-weight: 600;
+  }
+  
+  select{
+    height: 24px;
+    border-radius: 4px;
+    font-weight: 300;
+    font-size: smaller;
+  }
+  
+  .findtreatment-result--container{
+    margin: 0px 8px;
+  }
+  
+  .findtreatment-result--filter label{
+    margin-right: 8px;
+    font-weight: 600;
+  }
+  
+  h1,h2,h3,h4,h5,h6{
+    margin: 0;
+    /* text-align: center; */
+    /* To remove later  this line above*/
+  }
+  
+  .findtreatment--container-mode{
+    width: fit-content;
+    height: fit-content;
+    margin-right: calc(15%);
+  }
+  
+  .findtreatment-result--list-wrapper{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  .card-photo--none{
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .card-photo--present{
+    max-height: 200px;
+    height: auto;
+    width: auto;
+  }
+  
+  .card-photo--mnone{
+    width: 135px;
+    height: 125px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .card-photo--mpresent{
+    width: 135px;
+    height: 125px;
+    max-height: 125px;
+  }
+  
+  .findtreatment-result--mtitle-caption{
+    height: 20px;
+    margin-bottom: 12px;
+  }
+  
+  select#filter-type{
+    text-align: center;
+    width: 100%;
+  }
+  
+  .max-width--250{
+    max-width: 250px;
+  }
+  
+  .header{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    z-index: 1;
+  }
+  
+  .know-more-btn{
+    gap:4px;
+    margin-left: auto;
+    width: fit-content;
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    background-color: rgb(89, 174, 186) !important;
+  }
+  
+  .flex{
+    display: flex !important;
+  }
+  
+  .min-height-100{
+    min-height: 100px;
+  }
+  
