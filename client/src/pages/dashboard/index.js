@@ -9,5 +9,6 @@ import EditArticle from "./EditArticle"
 
 import SharedLayout from "./SharedLayout";
 import ArticleDetails from "./ArticleDetails";
+import UserProfile from "./UserProfile";
 
-export {AddJob, AllJobs, Profile, Stats, SharedLayout, Upload,EditArticle, ArticleDetails}
+export {AddJob, AllJobs, Profile, Stats, SharedLayout, Upload,EditArticle, ArticleDetails,UserProfile}

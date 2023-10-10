@@ -1,7 +1,4 @@
-import { IoBarChartSharp } from 'react-icons/io5';
-import { MdQueryStats } from 'react-icons/md';
-import { FaWpforms } from 'react-icons/fa';
-import { ImProfile } from 'react-icons/im';
+import { ImHistory,ImPushpin,ImUpload,ImSearch } from 'react-icons/im';
 
 const links = [
     // {
@@ -20,7 +17,20 @@ const links = [
       id: 1,
       text: 'Find Treatment Centre',
       path: 'add-job',
-      icon: <FaWpforms />,
+      icon: <ImPushpin />,
+    },    
+    
+    {
+      id: 2,
+      text: 'Search/Filter Resources',
+      path: 'getcentre',
+      icon: <ImSearch />,
+    },
+    {
+      id: 3,
+      text: 'Upload Resources',
+      path: 'upload',
+      icon: <ImUpload />,
     },
     // {
     //   id: 4,
@@ -28,23 +38,11 @@ const links = [
     //   path: 'profile',
     //   icon: <ImProfile />,
     // },
-    // {
-    //   id: 5,
-    //   text: 'contact',
-    //   path: 'profile',
-    //   icon: <ImProfile />,
-    // },
     {
-      id: 2,
-      text: 'Search/Filter Resources',
-      path: 'getcentre',
-      icon: <ImProfile />,
-    },
-    {
-      id: 3,
-      text: 'Upload Resources',
-      path: 'upload',
-      icon: <ImProfile />,
+      id: 5,
+      text: 'User History',
+      path: 'user-profile',
+      icon: <ImHistory />,
     },
   ];
   

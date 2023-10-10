@@ -9,28 +9,11 @@ import Stack from "react-bootstrap/Stack";
 function ResourceUploadForm() {
   const [message, setMessage] = useState("");
   const [uploadedFiles, setUploadedFiles] = useState([]);
-  const [searchEmail, setSearchEmail] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
 
   let imageUploadBtn = useRef();
   let pdfUploadBtn = useRef();
   let videoUploadBtn = useRef();
   let documentUploadBtn = useRef();
-
-  const handleSearchInputChange = (event) => {
-    setSearchEmail(event.target.value);
-  };
-
-  const handleSearchSubmit = async () => {
-    try {
-      const response = await fetch(`/search?userid=${searchEmail}`);
-      const data = await response.json();
-      setSearchResults(data);
-      console.log(data);
-    } catch (error) {
-      console.error("Error fetching search results:", error);
-    }
-  };
 
   const [resourceData, setResourceData] = useState({
     topic: "",
@@ -138,9 +121,9 @@ function ResourceUploadForm() {
         <p>
           Please provide the details for the options below and click on publish
           to add your resource.
-          <br />
+          {/* <br />
           You can also search for your resource with your user ID below and
-          check the details.
+          check the details. */}
         </p>
 
         <div className="row g-3 mb-3">
@@ -340,7 +323,7 @@ function ResourceUploadForm() {
             </label>
           </div>
           <div className="uploaded-files">
-            {uploadedFiles.length != 0 && (
+            {uploadedFiles.length !== 0 && (
               <>
                 <h4>Uploaded Files:</h4>
               </>
@@ -361,138 +344,6 @@ function ResourceUploadForm() {
           </Stack>
 
           {message && <p>{message}</p>}
-        </div>
-      </div>
-        <div className="search-section">
-          <h2>User's History</h2>
-          <div className="container mb-4">
-          {/* <label htmlFor="searchEmail">Enter UserID and click on Search</label>
-        <input
-          type="email"
-          id="searchEmail"
-          value={searchEmail}
-          onChange={handleSearchInputChange}
-        />
-        <button onClick={handleSearchSubmit}>Search</button> */}
-          <InputGroup size="md" className="mt-2">
-            <InputGroup.Text id="search-input-group font-weight-bold">
-              User ID / Email :
-            </InputGroup.Text>
-            <Form.Control
-              aria-label="Search Box"
-              aria-describedby="inputGroup-sizing-sm"
-              value={searchEmail}
-              onChange={handleSearchInputChange}
-            />
-            <Button
-              size="lg"
-              variant="primary"
-              id="search-button"
-              className="z-0"
-              onClick={handleSearchSubmit}
-            >
-              Search
-            </Button>
-          </InputGroup>
-        
-
-        {searchResults.length > 0 && (
-          <div classname="search-results-container">
-            <h3>Search Results:</h3>
-            <ul>
-              {searchResults.map((result) => (
-                <li key={result.userid} className="search-results-card">
-                  <h3>
-                    <strong>User ID:</strong> {result.userid}
-                  </h3>
-                  <h3>
-                    <strong>Topic:</strong> {result.topic}
-                  </h3>
-                  <h3>
-                    <strong>Type:</strong> {result.type}
-                  </h3>
-                  <p>
-                    <strong>Subject:</strong> {result.subject}
-                  </p>
-                  <p>
-                    <strong>Content:</strong> {result.content}
-                  </p>
-                  <p>
-                    <strong>Date:</strong> {result.date}
-                  </p>
-                  <p>
-                    <strong>Timestamp:</strong> {result.time}
-                  </p>
-
-                  {result.urls.length > 0 && (
-                    <div>
-                      <p>
-                        <strong>URLs:</strong>
-                      </p>
-                      <ul>
-                        {result.urls.map((url) => (
-                          <li key={url}>{url}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {result.images.length > 0 && (
-                    <div>
-                      <p>
-                        <strong>Images:</strong>
-                      </p>
-                      <ul>
-                        {result.images.map((image) => (
-                          <li key={image.name}>{image.name}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {result.pdfs.length > 0 && (
-                    <div>
-                      <p>
-                        <strong>PDFs:</strong>
-                      </p>
-                      <ul>
-                        {result.pdfs.map((pdf) => (
-                          <li key={pdf.name}>{pdf.name}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {result.videos.length > 0 && (
-                    <div>
-                      <p>
-                        <strong>Videos:</strong>
-                      </p>
-                      <ul>
-                        {result.videos.map((video) => (
-                          <li key={video.name}>{video.name}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {result.documents.length > 0 && (
-                    <div>
-                      <p>
-                        <strong>Documents:</strong>
-                      </p>
-                      <ul>
-                        {result.documents.map((document) => (
-                          <li key={document.name}>{document.name}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
         </div>
       </div>
     </div>

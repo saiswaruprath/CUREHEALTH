@@ -142,3 +142,11 @@
 .custom-flex{
   flex:unset
 }
+
+.custom-link{
+  text-decoration: unset;
+}
+
+a{
+  color: var(--primary-500);
+}

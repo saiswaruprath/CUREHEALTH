@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { GoogleMap, Marker, InfoWindow, Autocomplete, useLoadScript } from '@react-google-maps/api';
+import { GoogleMap, Marker, InfoWindow, Autocomplete } from '@react-google-maps/api';
 import { Card, ListGroup } from 'react-bootstrap';
 import './MapContainer.css'; 
 
@@ -41,6 +41,7 @@ const MapContainer = () => {
 
   // var [selectedLocation, setSelectedLocation] = useRef(null);
   var selectedLocation = useRef();
+  // eslint-disable-next-line no-unused-vars
   var viewModeRef = useRef();
   const [center] = useState({ lat: 39.8283, lng: -98.5795 });
 
@@ -86,16 +87,13 @@ const MapContainer = () => {
   };
 
   const showPlaceDetails = async (place) => {
-    console.log(place);
-    const { lat, lng } = place.position;
-    const user_input = place.name;
-    const response = await fetch(`http://localhost:3000/api/know-more-details?lat=${lat}&lng=${lng}&user_input=${user_input}`);
-    const data = await response.json();
-
+    // const { lat, lng } = place.position;
+    // const user_input = place.name;
+    // const response = await fetch(`/api/know-more-details?lat=${lat}&lng=${lng}&user_input=${user_input}`);
+    // const data = await response.json();
     map.panTo(place.position);
     map.setZoom(15);
     setSelectedMarker(place);
-
   };
 
   const renderViewMode = (viewModeInput) => {
@@ -112,7 +110,6 @@ const MapContainer = () => {
 
     try {
       const response = await fetch(`http://localhost:3000/api/treatment-centers?lat=${lat}&lng=${lng}`);
-
       const data = await response.json();
 
       // Extract the coordinates of nearby treatment centers from the response
@@ -186,7 +183,7 @@ const MapContainer = () => {
           <h3>Search Treatment Center</h3>
         </div>
       </div>
-      {viewMode == 'interactive' ? <><div className='findtreatment-container'>
+      {viewMode === 'interactive' ? <><div className='findtreatment-container'>
         <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={3.5} onClick={handleMapClick} onLoad={map => setMap(map)}>
           {markers.map((marker, index) => (
             <Marker
@@ -276,14 +273,14 @@ const MapContainer = () => {
               <option value="health">Opioid Treatment Programs</option>
             </select>
           </div>
-          <div className='findtreatment-result--filter'>
+          {/* <div className='findtreatment-result--filter'>
             <label htmlFor="filter-type">Filter by:</label>
             <select id="filter-type" onChange={handleFilterChange}>
               <option value="">Choose a Facility Operation(Default: All)</option>
               <option value="topic">Public</option>
               <option value="topic">Private</option>
             </select>
-          </div>
+          </div> */}
           {/* <div className='findtreatment-location--action'>
               <button>Search</button>
             </div> */}
@@ -323,7 +320,7 @@ const MapContainer = () => {
           </div>
         </div></> : null}
 
-      {viewMode == 'map' ? <><div className='findtreatment-container--mapView'>
+      {viewMode === 'map' ? <><div className='findtreatment-container--mapView'>
         <GoogleMap
           mapContainerStyle={containerStyle_fullView}
           center={center}
@@ -393,7 +390,7 @@ const MapContainer = () => {
                         {/* <p class="card-text mb-2 text-muted text-truncate max-width--250">{e.address}</p> */}
                         <Card.Title className='px-2'>{e.name}</Card.Title>
                         <Card.Subtitle className="px-2 mb-2 text-muted">{e.address}</Card.Subtitle>
-                        <a href="#" class="btn btn-primary btn-sm flex flex-row know-more-btn" onClick={() => { showPlaceDetails(e) }}><i class="bi bi-info-circle"></i>Know More</a>
+                        <button class="btn btn-primary btn-sm flex flex-row know-more-btn" onClick={() => { showPlaceDetails(e) }}><i class="bi bi-info-circle"></i>Know More</button>
                       </div>
                       {/* <div class="card-footer w-100 text-muted">
                         Is it Open Now? {e.openingHours === 'Open' ? 'Yes' : 'No'}

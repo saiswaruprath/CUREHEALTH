@@ -75,7 +75,6 @@ const serviceAccountKey = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS)
 app.post('/api/update', async (req, res) => {
   try {
     const { type, value } = req.body;
-
     const collectionRef = firestore.collection('transaction_request');
 
     // Create a new document with appropriate fields based on the type
@@ -301,6 +300,27 @@ app.get('/api/treatment-centers', async (req, res) => {
   } catch (error) {
     console.error('Error retrieving treatment centers:', error);
     res.status(500).json({ error: 'Failed to retrieve treatment centers' });
+  }
+});
+
+app.get('/api/know-more-details', async (req, res) => {
+  const { lat, lng } = req.query;
+  const { user_input } = req.query;
+  // console.log(lat,lng,user_input);
+  res.set('Access-Control-Allow-Origin', '*');
+  const radius = 5000; // Specify the radius within which to search for treatment centers (in meters)
+  const apiKey = 'AIzaSyBIQlGq1fABBG_lC0dqDGVJ68fITqF1QLU';
+  try {
+    let url = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?fields=formatted_address%2Cname%2Crating%2Copening_hours%2Cgeometry&input=${user_input}&inputtype=textquery&locationbias=circle%3A${radius}%40${lat}%2C${lng}&key=${apiKey}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    // Extract the treatment center details from the response
+    const singleTreatmentCenter = data;
+    res.json({ results: singleTreatmentCenter });
+    console.log(singleTreatmentCenter)
+  } catch (error) {
+    console.error('Error retrieving specific treatment centers:', error);
+    res.status(500).json({ error: 'Failed to retrieve treatment centers details' });
   }
 });
 

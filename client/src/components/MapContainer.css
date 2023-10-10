@@ -75,9 +75,9 @@
     text-align: unset;
   }
   
-  .findtreatment-location--seachbox > button{
+  /* .findtreatment-location--seachbox > button{
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-  }
+  } */
   
   .findtreatment-location--seachbox-input{
     height: 24px;
@@ -159,6 +159,12 @@
     border-radius: 0 8px 8px 0px;
     height: 30px;
     font-weight: 600;
+    padding: unset;
+    background-color: var(--primary-500);
+  }
+
+  .findtreatment-location--seachbox button:hover{
+    background-color: var(--primary-700);
   }
   
   select{

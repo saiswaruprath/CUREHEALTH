@@ -148,7 +148,7 @@ button:hover {
 .search-results-card p {
   list-style-type: none;
   padding: 0;
-  background-color: orange;
+  /* background-color: orange; */
 }
 
 .search-results-card li {

@@ -1,16 +1,32 @@
+.details--container{
+  display: flex;
+  width: 100%;
+  margin: unset;
+  gap: 2em;
+}
 
+.details-header--container{
+}
 
+.details-header{
+  display: flex;
+  background-color: var(--green-light);
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  margin-bottom: 8px;
+}
 
-/* ButtonStyles.css */
-.button {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border-radius: 5px;
-    text-decoration: none;
-    margin: 10px;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-  }
-  
+.details-content--container{}
+
+.details-content--container p{
+  max-width: unset;
+  display: flex;
+  flex-direction: column;
+}
+
+.details-answers--container{}
+
+.max-width--unset{
+  max-width: unset;
+}
