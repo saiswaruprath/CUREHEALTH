@@ -51,6 +51,7 @@ app.use(xss());
 app.use(mongoSanitize());
 
 app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
   res.setHeader('Content-Security-Policy', "script-src 'self' https://maps.googleapis.com");
   next();
 });
@@ -271,8 +272,8 @@ app.get('/search', async (req, res) => {
 app.get('/api/treatment-centers', async (req, res) => {
   const { lat, lng } = req.query;
   const radius = 5000; // Specify the radius within which to search for treatment centers (in meters)
-  const apiKey = 'AIzaSyBGcMB5sQ7MZ7RpRLCWKqEdHzI3qj70EBM';
-
+  const apiKey = 'AIzaSyBIQlGq1fABBG_lC0dqDGVJ68fITqF1QLU';
+  res.set('Access-Control-Allow-Origin', '*');
   try {
    
 

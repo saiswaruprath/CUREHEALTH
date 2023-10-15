@@ -109,7 +109,7 @@ const MapContainer = () => {
 
 
     try {
-      const response = await fetch(`http://localhost:3000/api/treatment-centers?lat=${lat}&lng=${lng}`);
+      const response = await fetch(`/api/treatment-centers?lat=${lat}&lng=${lng}`);
       const data = await response.json();
 
       // Extract the coordinates of nearby treatment centers from the response
@@ -293,12 +293,11 @@ const MapContainer = () => {
           </div>
           <div className="findtreatment-result--title-caption">
             {markers.length !== 0 ? <i>{markers.length} results found</i> : <div></div>}
-            <br /><br />
           </div>
           <div className="findtreatment-result--list-wrapper">
-            {markers.map(function (e) {
+            {markers.map(function (e,index) {
               return <>
-                <Card style={{ width: '30%' }}>
+                <Card style={{ width: '30%' }} key={index}>
                   <Card.Body>
                     <Card.Title>{e.name}</Card.Title>
                     <Card.Subtitle className="mb-2 text-muted">{e.address}</Card.Subtitle>
@@ -378,21 +377,21 @@ const MapContainer = () => {
               <br /><br />
             </div>
             <div className="findtreatment-result--list-wrapper">
-              {markers.map(function (e) {
+              {markers.map(function (e,index) {
                 return <>
-                  <div class="container p-0">
-                    <div class="card flex-row min-height-100">
-                      <div class="card-header border-0 p-0">
+                  <div className="container p-0" key={index}>
+                    <div className="card flex-row min-height-100">
+                      <div className="card-header border-0 p-0">
                         {e.photos[0] !== undefined ? <Card.Img variant="right" src={`https://maps.googleapis.com/maps/api/place/photo?maxwidth=150&photoreference=${e.photos[0]?.photo_reference}&key=AIzaSyBIQlGq1fABBG_lC0dqDGVJ68fITqF1QLU`} className='card-photo--mpresent mr-1' /> : <div className='card-photo--mnone m-1'><b>No photos found!</b></div>}
                       </div>
-                      <div class="card-block p-0 w-100">
-                        {/* <h4 class="card-title text-truncate max-width--250">{e.name}</h4> */}
-                        {/* <p class="card-text mb-2 text-muted text-truncate max-width--250">{e.address}</p> */}
+                      <div className="card-block p-0 w-100">
+                        {/* <h4 className="card-title text-truncate max-width--250">{e.name}</h4> */}
+                        {/* <p className="card-text mb-2 text-muted text-truncate max-width--250">{e.address}</p> */}
                         <Card.Title className='px-2'>{e.name}</Card.Title>
                         <Card.Subtitle className="px-2 mb-2 text-muted">{e.address}</Card.Subtitle>
-                        <button class="btn btn-primary btn-sm flex flex-row know-more-btn" onClick={() => { showPlaceDetails(e) }}><i class="bi bi-info-circle"></i>Know More</button>
+                        <button className="btn btn-primary btn-sm flex flex-row know-more-btn" onClick={() => { showPlaceDetails(e) }}><i className="bi bi-info-circle"></i>go to</button>
                       </div>
-                      {/* <div class="card-footer w-100 text-muted">
+                      {/* <div className="card-footer w-100 text-muted">
                         Is it Open Now? {e.openingHours === 'Open' ? 'Yes' : 'No'}
                       </div> */}
                     </div>
