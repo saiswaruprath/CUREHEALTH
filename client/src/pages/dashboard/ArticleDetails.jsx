@@ -11,7 +11,7 @@ function ArticleDetails({ data }) {
   const [updateMessage, setUpdateMessage] = useState('');
   const [recentDocument, setRecentDocument] = useState(null);
   const [searchPerformed, setSearchPerformed] = useState(false);
-  const POLLING_INTERVAL = 1000;
+  const POLLING_INTERVAL = 3000;
 
 
   useEffect(() => {
@@ -148,6 +148,7 @@ function ArticleDetails({ data }) {
 
                             <ul>
                               <li>Answer: {item.answer}</li>
+                              <li>Answer Para: {item.answer_paragraph}</li>
                             </ul>
                           </div>
 
@@ -163,7 +164,7 @@ function ArticleDetails({ data }) {
               <p>No matching documents found.</p>
             )
           ) : (
-            <p>Please wait while we fetch the best possible match for your search...</p>
+            <p>{searchPerformed && <>Please wait while we fetch the best possible match for your search...</>}</p>
           )}
         </div>
       </div>
