@@ -6,6 +6,7 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
+import noimg from '../../assets/images/no-img.png'
 
 
 function EditArticle() {
@@ -126,10 +127,12 @@ function EditArticle() {
     return (
       <>
         <Card className='custom-card--container'>
-          <Card.Img variant="top" src={imageUrl} height={200} className='border-bottom--075 min-height--50' />
+          {imageUrl !== 'https://' ? <Card.Img variant="top" src={imageUrl} height={200} className='border-bottom--075 min-height--50' />:
+          <Card.Img variant="top" src={noimg} height={200} className='border-bottom--075 min-height--50' />
+          }
           <Card.Body>
             <Card.Title>{item.title}
-              {item.url && <a target='_blank' rel="noreferrer" href={item.url}><i class="bi bi-box-arrow-up-right ms-2"></i></a>}
+              {item.url && <a target='_blank' rel="noreferrer" href={item.url}><i className="bi bi-box-arrow-up-right ms-2"></i></a>}
             </Card.Title>
             <Card.Subtitle>{item.topic}</Card.Subtitle>
             <Card.Text className='custom-styled-card'>
@@ -137,7 +140,7 @@ function EditArticle() {
             </Card.Text>
             <Button variant="primary"><Link to={`/details/${item.title}`} onClick={() => localStorage.setItem('article-title', item.title)}>Know More</Link></Button>
             
-            {item.url && <a className='custom-link' target='_blank' rel="noreferrer" href={item.url}> <Button variant="primary"><i class="bi bi-box-arrow-up-right me-1"></i>Source</Button></a>}
+            {item.url && <a className='custom-link' target='_blank' rel="noreferrer" href={item.url}> <Button variant="primary"><i className="bi bi-box-arrow-up-right me-1"></i>Source</Button></a>}
            
           </Card.Body>
         </Card>
