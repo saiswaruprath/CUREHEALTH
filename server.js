@@ -53,7 +53,7 @@ app.use(mongoSanitize());
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.setHeader('Content-Security-Policy', "script-src 'self' https://maps.googleapis.com");
-  res.header("Cross-Origin-Resource-Policy", "cross-origin")
+  res.header("Cross-Origin-Resource-Policy", "same-site")
   next();
 });
 
