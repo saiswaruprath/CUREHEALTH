@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { GoogleMap, Marker, InfoWindow, Autocomplete } from '@react-google-maps/api';
 import { Card, ListGroup } from 'react-bootstrap';
 import './MapContainer.css'; 
+import noimg from '../assets/images/no-img.png'
 
 const containerStyle = {
   display: 'flex',
@@ -301,7 +302,7 @@ const MapContainer = () => {
                   <Card.Body>
                     <Card.Title>{e.name}</Card.Title>
                     <Card.Subtitle className="mb-2 text-muted">{e.address}</Card.Subtitle>
-                    {e.photos[0] !== undefined ? <Card.Img variant="top" src={`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${e.photos[0]?.photo_reference}&key=AIzaSyBIQlGq1fABBG_lC0dqDGVJ68fITqF1QLU`} className='card-photo--present' /> : <div className='card-photo--none'><b>No photos found!</b></div>}
+                    {e.photos[0] !== undefined ? <Card.Img variant="top" src={`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${e.photos[0]?.photo_reference}&key=AIzaSyBIQlGq1fABBG_lC0dqDGVJ68fITqF1QLU`} className='card-photo--present' /> : <Card.Img variant="top" src={noimg} height={200} className='border-bottom--075 min-height--50' />}
                     {/* <Card.Text>
                     Some quick example text to build on the card title.
                   </Card.Text> */}

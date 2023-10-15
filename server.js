@@ -43,17 +43,26 @@ if (process.env.NODE_ENV !== 'production') {
 const __dirname = dirname(fileURLToPath(import.meta.url));  
 app.use(express.static(path.join(__dirname, 'newimages')));
 app.use(express.static(path.resolve(__dirname, './client/build')));
-app.use(cors());
+app.use(cors({
+  origin: '*'
+}));
 app.use(express.json())
 
 app.use(helmet());
+app.use(
+  helmet({
+    crossOriginEmbedderPolicy: false,
+    // ...
+  })
+);
+
 app.use(xss());
 app.use(mongoSanitize());
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.setHeader('Content-Security-Policy', "script-src 'self' https://maps.googleapis.com");
-  res.header("Cross-Origin-Resource-Policy", "same-site")
+  res.header('Content-Security-Policy', "script-src 'self' https://maps.googleapis.com 'unsafe-inline'");
+  res.header('Access-Control-Allow-Origin', '*');
+  res.removeHeader("Cross-Origin-Embedder-Policy");
   next();
 });
 
@@ -274,15 +283,11 @@ app.get('/api/treatment-centers', async (req, res) => {
   const { lat, lng } = req.query;
   const radius = 5000; // Specify the radius within which to search for treatment centers (in meters)
   const apiKey = 'AIzaSyBIQlGq1fABBG_lC0dqDGVJ68fITqF1QLU';
-  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Origin','*');
   try {
    
-
-   
     let url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&type=health&keyword=treatment&key=${apiKey}`;
-
     const response = await fetch(url);
-    
     const data = await response.json();
 
     // Extract the treatment center details from the response
@@ -308,7 +313,6 @@ app.get('/api/treatment-centers', async (req, res) => {
 app.get('/api/know-more-details', async (req, res) => {
   const { lat, lng } = req.query;
   const { user_input } = req.query;
-  // console.log(lat,lng,user_input);
   res.set('Access-Control-Allow-Origin', '*');
   const radius = 5000; // Specify the radius within which to search for treatment centers (in meters)
   const apiKey = 'AIzaSyBIQlGq1fABBG_lC0dqDGVJ68fITqF1QLU';
