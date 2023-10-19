@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import './articledetails.css';
+import Accordion from 'react-bootstrap/Accordion';
+
 
 function ArticleDetails({ data }) {
   const location = useLocation();
@@ -30,7 +32,7 @@ function ArticleDetails({ data }) {
       });
       const data = await response.json();
       setUpdateMessage(data.message);
-      setSearchPerformed(true); 
+      setSearchPerformed(true);
       // reloadData();
       // setnewitem(data.find(item => item.title.includes(itemTitle)));
 
@@ -40,7 +42,7 @@ function ArticleDetails({ data }) {
     }
   };
 
-  const reloadData = async() => {
+  const reloadData = async () => {
     fetch('/api/data')
       .then(response => response.json())
       .then(jsonData => {
@@ -108,29 +110,64 @@ function ArticleDetails({ data }) {
         <div className="details-header--container">
           <Link to="/getcentre" className="btn btn-primary">Back</Link>
         </div>
-        <img src={imageUrl} alt="thumbnail" width="250" height="170" />
+        <img src={imageUrl} alt="thumbnail" className="details-image--container" />
         <div className="details-content--container">
-          <p><strong>Topic:</strong> {newitem.topic}</p>
-          <p><strong>Context:</strong> {newitem.context}</p>
-          <p><strong>Summary:</strong> {newitem.summary}</p>
-        </div>
-        <div className="details-answers--container">
-          <div>{newitem.questions && Object.keys(newitem.questions).map((question, index) => (
-            <div key={index}>
-              <p className='mb-0 max-width--unset'><strong>Question:</strong>{question}</p>
-              <ul>
-                {newitem.questions[question].map((answer, answerIndex) => (
-                  <li key={answerIndex}><strong>Answer:</strong> {answer.answer}</li>
-                ))}
-              </ul>
-            </div>
-          ))}</div>
+          <Accordion defaultActiveKey={['0']} alwaysOpen>
+            <Accordion.Item eventKey="0">
+              <Accordion.Header>Summary:</Accordion.Header>
+              <Accordion.Body>
+                <p><strong>Topic:  {newitem.topic}</strong></p>
+                <p>{newitem.summary}</p>
+              </Accordion.Body>
+            </Accordion.Item>
+            <Accordion.Item eventKey="1">
+              <Accordion.Header>Context:</Accordion.Header>
+              <Accordion.Body>
+                <p>{newitem.context}</p>
+              </Accordion.Body>
+            </Accordion.Item>
+            <Accordion.Item eventKey="2">
+              <Accordion.Header>Frequently Asked Questions:</Accordion.Header>
+              <Accordion.Body>
+                <div className="details-answers--container">
+                  <div>{newitem.questions && Object.keys(newitem.questions).map((question, index) => (
+                    <div className="bb-1 details-answers--single" key={index}>
+                      <p className='mb-0 max-width--unset'><strong>{question}</strong></p>
+                      <ul>
+                        {newitem.questions[question].map((answer, answerIndex) => (
+                          <li key={answerIndex}><strong>Answer:</strong> {answer.answer}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}</div>
+                </div>
+              </Accordion.Body>
+            </Accordion.Item>
+          </Accordion>
+
+          <div className="form-floating col-12 mt-3">
+            <input
+              type="text"
+              className="form-control"
+              id="question-form-control"
+              placeholder="Enter your question here"
+              name="Question"
+            // value={resourceData.subject}
+            // onChange={handleInputChange}
+            />
+            <label htmlFor="formGroupSubject" className="">
+              Enter your question here
+            </label>
+          </div>
+
           <input
+            className='my-4'
             type="text"
             placeholder="Enter your own question"
             value={customQuestion}
             onChange={(e) => setCustomQuestion(e.target.value)} />
           <button className='btn btn-primary' onClick={handleUpdate}>Check Answer</button>
+
         </div>
 
         <div className='details-questions--container'>

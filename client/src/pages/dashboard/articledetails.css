@@ -1,8 +1,9 @@
 .details--container{
   display: flex;
   width: 100%;
-  margin: unset;
+  margin: auto;
   gap: 2em;
+  
 }
 
 .details-header--container{
@@ -17,16 +18,46 @@
   margin-bottom: 8px;
 }
 
-.details-content--container{}
+.details-image--container{
+  max-width: 100%;
+  margin: 0 25px;
+}
+
+.details-content--container{
+
+}
+
+.details-content--container .accordion-button {
+  font-size: 1.25rem;
+  font-family: sans-serif;
+}
+
+.details-content--container button.accordion-button:hover {
+  background-color: var(--primary-500);
+}
 
 .details-content--container p{
   max-width: unset;
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
+}
+
+.details-content--container p strong{
+  margin-right: 4px;
 }
 
 .details-answers--container{}
 
 .max-width--unset{
   max-width: unset;
+}
+
+.bb-1{
+  border-bottom: solid 1px;
+  margin-bottom: 8px;
+}
+
+.bb-1:last-child{
+  border-bottom: unset;
+  margin-bottom: 8px;
 }
