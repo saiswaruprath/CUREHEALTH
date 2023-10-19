@@ -6,7 +6,7 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
-import noimg from '../../assets/images/no-img.png'
+import noimg from '../../assets/images/no-img.png';
 
 
 function EditArticle() {
@@ -67,9 +67,9 @@ function EditArticle() {
     }
   }
 
-  // function compareByRank(a, b) {
-  //   return a.rank - b.rank;
-  // }
+  function compareByRank(a, b) {
+    return a.rank - b.rank;
+  }
 
   useEffect(() => {
     let pollTimer;
@@ -127,9 +127,11 @@ function EditArticle() {
     return (
       <>
         <Card className='custom-card--container'>
-          {imageUrl !== 'https://' ? <Card.Img variant="top" src={imageUrl} height={200} className='border-bottom--075 min-height--50' />:
-          <Card.Img variant="top" src={noimg} height={200} className='border-bottom--075 min-height--50' />
-          }
+          <div className="custom-card-image-container border-bottom--075 min-height--50">
+            {imageUrl !== 'https://' ? <Card.Img variant="top" src={imageUrl} height={200}  />:
+            <Card.Img variant="top" src={noimg} height={200} className='width-100' />
+            }
+          </div>
           <Card.Body>
             <Card.Title>{item.title}
               {item.url && <a target='_blank' rel="noreferrer" href={item.url}><i className="bi bi-box-arrow-up-right ms-2"></i></a>}
@@ -210,7 +212,7 @@ function EditArticle() {
                     }
                     return null
                   })
-                  // .sort(compareByRank)
+                  .sort(compareByRank)
                   .map((item, index) => {
                     return (
                       <ArticleCard key={index} item={item} />

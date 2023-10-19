@@ -3,6 +3,10 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import './articledetails.css';
 import Accordion from 'react-bootstrap/Accordion';
+import noimg from '../../assets/images/no-img.png';
+import InputGroup from 'react-bootstrap/InputGroup';
+import Button from 'react-bootstrap/Button';
+
 
 
 function ArticleDetails({ data }) {
@@ -108,9 +112,13 @@ function ArticleDetails({ data }) {
       <h2 className='details-header'>Article: {itemTitle}</h2>
       <div className="container details--container">
         <div className="details-header--container">
-          <Link to="/getcentre" className="btn btn-primary">Back</Link>
+          <Link to="/getcentre" className="btn btn-primary"><i class="bi bi-arrow-left-circle"></i> Back</Link>
         </div>
-        <img src={imageUrl} alt="thumbnail" className="details-image--container" />
+        <div className="details-image--container" >
+          {imageUrl !== 'https://' ? <img src={imageUrl} alt="thumbnail" /> :
+            <img variant="top" src={noimg} height={200} className='min-height--50' />
+          }
+        </div>
         <div className="details-content--container">
           <Accordion defaultActiveKey={['0']} alwaysOpen>
             <Accordion.Item eventKey="0">
@@ -152,21 +160,15 @@ function ArticleDetails({ data }) {
               id="question-form-control"
               placeholder="Enter your question here"
               name="Question"
-            // value={resourceData.subject}
-            // onChange={handleInputChange}
+              value={customQuestion}
+              onChange={(e) => setCustomQuestion(e.target.value)}
             />
             <label htmlFor="formGroupSubject" className="">
               Enter your question here
             </label>
+            <button className='btn btn-primary mt-2' onClick={handleUpdate}>Check Answer</button>
           </div>
-
-          <input
-            className='my-4'
-            type="text"
-            placeholder="Enter your own question"
-            value={customQuestion}
-            onChange={(e) => setCustomQuestion(e.target.value)} />
-          <button className='btn btn-primary' onClick={handleUpdate}>Check Answer</button>
+          
 
         </div>
 
