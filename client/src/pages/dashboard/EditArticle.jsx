@@ -128,8 +128,8 @@ function EditArticle() {
       <>
         <Card className='custom-card--container'>
           <div className="custom-card-image-container border-bottom--075 min-height--50">
-            {imageUrl !== 'https://' ? <Card.Img variant="top" src={imageUrl} height={200}  />:
-            <Card.Img variant="top" src={noimg} height={200} className='width-100' />
+            {imageUrl !== 'https://' ? <Card.Img variant="top" src={imageUrl} height={200} /> :
+              <Card.Img variant="top" src={noimg} height={200} className='width-100' />
             }
           </div>
           <Card.Body>
@@ -141,9 +141,9 @@ function EditArticle() {
               {item.summary}
             </Card.Text>
             <Button variant="primary"><Link to={`/details/${item.title}`} onClick={() => localStorage.setItem('article-title', item.title)}>Know More</Link></Button>
-            
+
             {item.url && <a className='custom-link' target='_blank' rel="noreferrer" href={item.url}> <Button variant="primary"><i className="bi bi-box-arrow-up-right me-1"></i>Source</Button></a>}
-           
+
           </Card.Body>
         </Card>
         {/* 
@@ -195,7 +195,8 @@ function EditArticle() {
           </Button>
         </InputGroup>
         {/* <p>{updateMessage}</p> */}
-        <div className='my-2 results'>
+        <h3 className='my-2'>Here is list of the top 5 ranked articles based on your query.</h3>
+        <div className='my-2 search-results'>
           {!recentDocumentLoading && searchPerformed ? (
             recentDocument ? (
               <>
@@ -214,8 +215,27 @@ function EditArticle() {
                   })
                   .sort(compareByRank)
                   .map((item, index) => {
+                    const imageUrl = item.thumbnails.startsWith('https://')
+                      ? item.thumbnails
+                      : `https://${item.thumbnails}`;
                     return (
-                      <ArticleCard key={index} item={item} />
+                      // <ArticleCard key={index} item={item} />
+                      <>
+                        <div className="p-0" key={index}>
+                          <div className="card flex-row min-height-100">
+                            <div className="card-header border-0 p-0">
+                              {imageUrl !== 'https://' ? <Card.Img variant="top" src={imageUrl} height={100} /> :
+                                <Card.Img variant="top" src={noimg} height={100} className='width-100' />
+                              }
+                            </div>
+                            <div className="card-block p-0 w-100">
+                              <Card.Title className='px-2'>{item.title}</Card.Title>
+                              <Card.Subtitle className="px-2 mb-2 text-muted">{item.topic}</Card.Subtitle>
+                              <button className="btn btn-primary btn-sm flex flex-row know-more-btn"><i className="bi bi-info-circle"></i>go to</button>
+                            </div>
+                          </div>
+                        </div>
+                      </>
                     )
                   })}
                 {/* {Object.keys(recentDocument).map((topic, index) => {
