@@ -195,7 +195,8 @@ function EditArticle() {
           </Button>
         </InputGroup>
         {/* <p>{updateMessage}</p> */}
-        <h3 className='my-2'>Here is list of the top 5 ranked articles based on your query.</h3>
+        {(searchPerformed && recentDocumentLoading) && <h5 className='my-2 search-caption slide-top loading-dots'>We are checking the knowledge base for related articles</h5>}
+        {(searchPerformed && !recentDocumentLoading) && <h5 className='my-2 search-caption slide-top'>Here is list of the top 5 ranked articles based on your query!</h5>}
         <div className='my-2 search-results'>
           {!recentDocumentLoading && searchPerformed ? (
             recentDocument ? (
@@ -221,17 +222,19 @@ function EditArticle() {
                     return (
                       // <ArticleCard key={index} item={item} />
                       <>
-                        <div className="p-0" key={index}>
+                        <div className="p-0 card-position slide-right" key={index}>
                           <div className="card flex-row min-height-100">
-                            <div className="card-header border-0 p-0">
+                            <div className="card-header border-0 p-0 search-card--img">
                               {imageUrl !== 'https://' ? <Card.Img variant="top" src={imageUrl} height={100} /> :
-                                <Card.Img variant="top" src={noimg} height={100} className='width-100' />
+                                <Card.Img variant="top" src={noimg} height={100} />
                               }
                             </div>
                             <div className="card-block p-0 w-100">
-                              <Card.Title className='px-2'>{item.title}</Card.Title>
+                              <Card.Title className='px-2'>
+                              {item.url && <a target='_blank' rel="noreferrer" href={item.url}>{item.title}<i className="bi bi-box-arrow-up-right ms-2"></i></a>}
+                                </Card.Title>
                               <Card.Subtitle className="px-2 mb-2 text-muted">{item.topic}</Card.Subtitle>
-                              <button className="btn btn-primary btn-sm flex flex-row know-more-btn"><i className="bi bi-info-circle"></i>go to</button>
+                              <Link to={`/details/${item.title}`} onClick={() => localStorage.setItem('article-title', item.title)}><button className="btn btn-primary btn-sm flex flex-row search-more-btn"><i className="bi bi-info-circle mx-1"></i> Know More</button></Link>
                             </div>
                           </div>
                         </div>
