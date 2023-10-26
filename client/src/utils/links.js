@@ -18,7 +18,7 @@ const links = [
     {
       id: 7,
       text: 'Dashboard',
-      path: 'add-job',
+      path: 'landing-page',
       icon: <ImHome />,
     }, 
     {
