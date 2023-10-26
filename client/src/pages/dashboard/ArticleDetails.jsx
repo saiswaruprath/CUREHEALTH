@@ -4,10 +4,6 @@ import { useLocation } from 'react-router-dom';
 import './articledetails.css';
 import Accordion from 'react-bootstrap/Accordion';
 import noimg from '../../assets/images/no-img.png';
-import InputGroup from 'react-bootstrap/InputGroup';
-import Button from 'react-bootstrap/Button';
-
-
 
 function ArticleDetails({ data }) {
   const location = useLocation();

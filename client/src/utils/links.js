@@ -1,4 +1,6 @@
-import { ImHistory,ImPushpin,ImUpload,ImSearch } from 'react-icons/im';
+import { ImHome,ImHistory,ImPushpin,ImUpload,ImSearch } from 'react-icons/im';
+import { BsTranslate } from "react-icons/bs";
+
 
 const links = [
     // {
@@ -14,21 +16,27 @@ const links = [
     //   icon: <MdQueryStats />,
     // },
     {
+      id: 7,
+      text: 'Dashboard',
+      path: 'add-job',
+      icon: <ImHome />,
+    }, 
+    {
       id: 1,
-      text: 'Find Treatment Centre',
+      text: 'Find Centres',
       path: 'add-job',
       icon: <ImPushpin />,
     },    
     
     {
       id: 2,
-      text: 'Search/Filter Resources',
+      text: 'Search Resources',
       path: 'getcentre',
       icon: <ImSearch />,
     },
     {
       id: 3,
-      text: 'Upload Resources',
+      text: 'Upload Articles ',
       path: 'upload',
       icon: <ImUpload />,
     },
@@ -41,8 +49,14 @@ const links = [
     {
       id: 5,
       text: 'User History',
-      path: 'user-profile',
+      path: 'user-history',
       icon: <ImHistory />,
+    },
+    {
+      id: 6,
+      text: 'Translation',
+      path: 'translation',
+      icon: <BsTranslate />,
     },
   ];
   

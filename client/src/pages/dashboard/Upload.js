@@ -68,6 +68,7 @@ function ResourceUploadForm() {
   };
 
   const handleClear = () => {
+    setMessage("All fields have been cleared.");
     setResourceData({
       topic: "",
       type: "",
@@ -80,7 +81,7 @@ function ResourceUploadForm() {
       documents: [],
       urls: [],
     });
-    setMessage("");
+    setTimeout(()=>{setMessage("");},5000)
     setUploadedFiles([]);
   };
 
@@ -125,9 +126,8 @@ function ResourceUploadForm() {
           You can also search for your resource with your user ID below and
           check the details. */}
         </p>
-
         <div className="row g-3 mb-3">
-          <div className="form-floating col">
+          {/* <div className="form-floating col">
             <input
               type="text"
               className="form-control"
@@ -141,8 +141,27 @@ function ResourceUploadForm() {
             <label htmlFor="formGroupResourceTopic" className="">
               Resource Topic
             </label>
-          </div>
+          </div> */}
           <div className="form-floating col">
+            <select className="form-select" id="formGroupResourceTopic" aria-label="Resource Topic"
+              name="topic" value={resourceData.topic} onChange={handleInputChange}>
+              <option value="0" disabled>Choose the Resource Topic from below:</option>
+              <option value="0" hidden>Choose a Resource Topic</option>
+              <option value="Resource Guides">Resource Guides</option>
+              <option value="Mental Health">Mental Health</option>
+              <option value="Domestic Violence">Domestic Violence</option>
+              <option value="Substance Use">Substance Use</option>
+              <option value="Native Hawaiians">Native Hawaiians</option>
+              <option value="Pacific Islanders">Pacific Islanders</option>
+              <option value="Asian Americans">Asian Americans</option>
+              <option value="Government Orgs">Government Orgs</option>
+              <option value="Other Behavioral Health">Other Behavioral Health</option>
+              <option value="Multi-Language or Translation">Multi-Language or Translation</option>
+              <option value="Other">Other</option>
+            </select>
+            <label htmlFor="formGroupResourceTopic1" className="left--unset">Resource Topic</label>
+          </div>
+          {/* <div className="form-floating col">
             <input
               type="text"
               className="form-control"
@@ -156,35 +175,47 @@ function ResourceUploadForm() {
             <label htmlFor="formGroupResourceType" className="">
               Resource Type
             </label>
+          </div> */}
+          <div className="form-floating col">
+            <select className="form-select" id="formGroupResourceTopic" aria-label="Resource Type"
+              name="type" value={resourceData.type} onChange={handleInputChange}>
+              <option value="0" disabled>Choose the Resource Type from below:</option>
+              <option value="0" hidden>Choose a Resource Type</option>
+              <option value="url">URL's</option>
+              <option value="files">File Upload</option>
+              <option value="content">Tags & Content</option>
+            </select>
+            <label htmlFor="formGroupResourceTopic1" className="left--unset">Upload Type</label>
           </div>
         </div>
-        <div className="form-floating col-12 mb-3">
-          <input
-            type="text"
-            className="form-control"
-            id="formGroupSubject"
-            placeholder="Enter Subject Here"
-            name="subject"
-            value={resourceData.subject}
-            onChange={handleInputChange}
-          />
-          <label htmlFor="formGroupSubject" className="">
-            Subject
-          </label>
-        </div>
-        <div className="form-floating col-12 mb-3">
-          <textarea
-            className="min-height--75 form-control"
-            id="formGroupContent"
-            placeholder="Enter Content Here"
-            name="content"
-            value={resourceData.content}
-            onChange={handleInputChange}
-          />
-          <label htmlFor="formGroupContent" className="form-label">
-            Content
-          </label>
-        </div>
+        {resourceData.type === "content" && <>
+          <div className="form-floating col-12 mb-3">
+            <input
+              type="text"
+              className="form-control"
+              id="formGroupSubject"
+              placeholder="Enter Subject Here"
+              name="subject"
+              value={resourceData.subject}
+              onChange={handleInputChange}
+            />
+            <label htmlFor="formGroupSubject" className="">
+              Tags
+            </label>
+          </div>
+          <div className="form-floating col-12 mb-3">
+            <textarea
+              className="min-height--75 form-control"
+              id="formGroupContent"
+              placeholder="Enter Content Here"
+              name="content"
+              value={resourceData.content}
+              onChange={handleInputChange}
+            />
+            <label htmlFor="formGroupContent" className="form-label">
+              Content
+            </label>
+          </div></>}
         <div className="form-floating col-12 mb-3">
           <input
             type="text"
@@ -200,62 +231,65 @@ function ResourceUploadForm() {
           </label>
         </div>
 
-        <InputGroup size="md" className="mt-2 mb-3">
-          <InputGroup.Text id="search-input-group">
-            <i className="bi bi-upload"></i>
-          </InputGroup.Text>
-          <Form.Control
-            aria-label="Upload box"
-            aria-describedby="inputGroup-sizing-sm"
-            disabled={true}
-            placeholder="Select File Type to Upload:"
-          />
-          <Button
-            variant="outline-primary"
-            id="upload-image-button"
-            className="z-0"
-            onClick={(e) => imageUploadBtn.current?.click()}
-          >
-            <i className="far fa-image"></i> Images
-          </Button>
-          <Button
-            variant="outline-primary"
-            id="upload-pdf-button"
-            className="z-0"
-            onClick={(e) => pdfUploadBtn.current?.click()}
-          >
-            <i className="far fa-file-alt"></i> PDF's
-          </Button>
-          <Button
-            variant="outline-primary"
-            id="upload-video-button"
-            className="z-0"
-            onClick={(e) => videoUploadBtn.current?.click()}
-          >
-            <i className="far fa-file-video"></i> Videos
-          </Button>
-          <Button
-            variant="outline-primary"
-            id="upload-doc-button"
-            className="z-0"
-            onClick={(e) => documentUploadBtn.current?.click()}
-          >
-            <i className="far fa-file"></i> Documents
-          </Button>
-        </InputGroup>
+        {resourceData.type === "files" && <>
+          <InputGroup size="md" className="mt-2 mb-3">
+            <InputGroup.Text id="search-input-group">
+              <i className="bi bi-upload"></i>
+            </InputGroup.Text>
+            <Form.Control
+              aria-label="Upload box"
+              aria-describedby="inputGroup-sizing-sm"
+              disabled={true}
+              placeholder="Select File Type to Upload:"
+            />
+            <Button
+              variant="outline-primary"
+              id="upload-image-button"
+              className="z-0"
+              onClick={(e) => imageUploadBtn.current?.click()}
+            >
+              <i className="far fa-image"></i> Images
+            </Button>
+            <Button
+              variant="outline-primary"
+              id="upload-pdf-button"
+              className="z-0"
+              onClick={(e) => pdfUploadBtn.current?.click()}
+            >
+              <i className="far fa-file-alt"></i> PDF's
+            </Button>
+            <Button
+              variant="outline-primary"
+              id="upload-video-button"
+              className="z-0"
+              onClick={(e) => videoUploadBtn.current?.click()}
+            >
+              <i className="far fa-file-video"></i> Videos
+            </Button>
+            <Button
+              variant="outline-primary"
+              id="upload-doc-button"
+              className="z-0"
+              onClick={(e) => documentUploadBtn.current?.click()}
+            >
+              <i className="far fa-file"></i> Documents
+            </Button>
+          </InputGroup>
+        </>}
 
-        <div className="form-floating col-12 mb-4">
-          <textarea
-            className="form-control"
-            id="formGroupUrl"
-            placeholder="Enter URL Here"
-            name="url"
-            onChange={(e) => handleFileChange(e, "urls")}
-          />
-          <label htmlFor="formGroupContent" className="form-label">
-            URL's (multiple URL's to separated by commas)
-          </label>
-        </div>
+        {resourceData.type === "url" && <>
+          <div className="form-floating col-12 mb-4">
+            <textarea
+              className="form-control"
+              id="formGroupUrl"
+              placeholder="Enter URL Here"
+              name="url"
+              onChange={(e) => handleFileChange(e, "urls")}
+            />
+            <label htmlFor="formGroupContent" className="form-label">
+              URL's (separated by commas)
+            </label>
+          </div></>}
 
         <div className="form-group">
           <div className="file-upload-icons d-none">
@@ -343,10 +377,10 @@ function ResourceUploadForm() {
             </Button>
           </Stack>
 
-          {message && <p>{message}</p>}
+          {message && <p className="toaster-btm slide-in-bottom-then-hide">{message}</p>}
         </div>
       </div>
-    </div>
+    </div >
   );
 }
 

@@ -129,18 +129,6 @@
     justify-content: flex-end;
   }
   
-  hr{
-    width: calc(100% + 20px);
-  }
-  
-  /* button{
-    width: 88px;
-    height: 36px;
-    flex-shrink: 0;
-    border-radius: 4px;
-    background: rgba(0, 0, 0, 0.10);
-  } */
-  
   .findtreatment-location--seachbox input{
     border-radius: 8px 0 0 8px;
     max-width: calc(100% - 60px);

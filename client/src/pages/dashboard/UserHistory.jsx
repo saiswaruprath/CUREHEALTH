@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import InputGroup from "react-bootstrap/InputGroup";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
@@ -6,12 +6,9 @@ import './editarticle.css';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 
-const UserProfile = () => {
-    let { name, email, lastName } = JSON.parse(localStorage.getItem("user"));
-    email = "test123@gmail.com"
-
+const UserHistory = () => {
     const [searchResults, setSearchResults] = useState([]);
-    const [searchEmail, setSearchEmail] = useState(email);
+    const [searchEmail, setSearchEmail] = useState("");
 
     const handleSearchSubmit = async () => {
         try {
@@ -24,31 +21,16 @@ const UserProfile = () => {
         }
     };
 
-    useEffect(() => {
-        handleSearchSubmit()
-    }, []);
-
     const handleSearchInputChange = (event) => {
         setSearchEmail(event.target.value);
     };
 
     return (
         <>
-            <div className="search-section" onLoad={handleSearchSubmit}>
-                <h2 className="text-center">User's Profile</h2>
+            <div className="search-section">
+                <h2 className="text-center">User's History</h2>
                 <div className="container mb-4">
-                    <div>
-                        <Card className="my-4">
-                            <Card.Body>
-                                <Card.Title>Name: {name} {lastName}</Card.Title>
-                                <Card.Subtitle className="mb-2 text-muted">Email:{email}</Card.Subtitle>
-                                <Card.Text>
-                                    This is work in progress.
-                                </Card.Text>
-                            </Card.Body>
-                        </Card>
-                    </div>
-                    {/* <InputGroup size="md" className="mt-2">
+                    <InputGroup size="md" className="mt-2">
                         <InputGroup.Text id="search-input-group font-weight-bold">
                             User ID / Email :
                         </InputGroup.Text>
@@ -67,11 +49,11 @@ const UserProfile = () => {
                         >
                             Search
                         </Button>
-                    </InputGroup> */}
+                    </InputGroup>
                     {searchResults.length > 0 && (
                         <div classname="search-results-container">
-                            <h4 className="text-center my-2">Previous User Posts:</h4>
-                            <ul className='p-0'>
+                            <h4 className="text-center my-2">Search Results:</h4>
+                            <ul>
                                 {searchResults.map((result) => (
                                     <li key={result.userid} className="search-results-card mb-4">
                                         <Card>
@@ -239,4 +221,4 @@ const UserProfile = () => {
     );
 };
 
-export default UserProfile;
+export default UserHistory;

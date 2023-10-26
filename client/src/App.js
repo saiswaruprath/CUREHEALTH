@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Error, Landing, Register, ProtectedRoute } from './pages'
-import { AddJob, AllJobs, Profile, SharedLayout, Upload, EditArticle, ArticleDetails, UserProfile } from './pages/dashboard'
+import { AddJob, AllJobs, Profile, SharedLayout, Upload, EditArticle, ArticleDetails, UserHistory } from './pages/dashboard'
 // import { Stats, ArticleUpdate, FetchArticles } from './pages/dashboard'
 import { LoadScript } from '@react-google-maps/api';
+import Translation from './pages/dashboard/Translation';
+import UserProfile from './pages/dashboard/UserProfile';
 
 
 
@@ -39,7 +41,9 @@ function App() {
             <Route path='getcentre' element={<EditArticle />} />
             <Route path='upload' element={<Upload />} />
             <Route path="details/:itemTitle" element={<ArticleDetails data={data} />} />
+            <Route path='user-history' element={<UserHistory />} />
             <Route path='user-profile' element={<UserProfile />} />
+            <Route path='translation' element={<Translation />} />
 
           </Route>
           <Route path='/register' element={<Register />} />
