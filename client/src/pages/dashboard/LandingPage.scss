@@ -3,7 +3,7 @@
   overflow-y: auto;
   overscroll-behavior-y: contain;
   scroll-snap-type: y mandatory;
-  height: 100vh;
+  height: calc(100vh - 96px);
   width: 100%;
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -12,17 +12,47 @@
   }
 
   section{
-    height: 100vh;
+    height: 100%;
     scroll-snap-align: start;
+    
   }
 }
 
+.custom-heading{
+    font-family: math;
+    font-weight: 600;
+    font-size: 2em;
+}
+
 .bgRed{
-    background-color: red;
+    background-color: var(--primary-100);
+    background-image: url('../../assets/images/therapist-office.jpg');
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: 40px;
 }
 .bgBlue{
-    background-color: blue
+    background-color: var(--primary-200);
+    background-image: url('../../assets/images/hawaii-roads.jpg');
+    background-size: cover;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: 40px;
 }
 .bgGreen{
-    background-color: green;
+    background-color: var(--primary-300);
+    background-image: url('../../assets/images/office-reception-design.avif');
+    background-size: cover;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: 40px;
 }

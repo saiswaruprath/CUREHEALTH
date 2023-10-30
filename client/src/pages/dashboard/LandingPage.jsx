@@ -2,6 +2,9 @@ import aahnpiflier from '../../assets/images/flier.jpg'
 import MySection from '../../components/MySection';
 import './LandingPage.scss';
 
+import img1 from '../../assets/images/therapist-office.jpg';
+import img2 from '../../assets/images/therapist-office.jpg';
+import img3 from '../../assets/images/therapist-office.jpg';
 
 
 const LandingPage = () => {
@@ -10,13 +13,19 @@ const LandingPage = () => {
     return <>
         <div className='snap-container'>
             <section className='bgRed'>
-                Test Section - 1
+                <h3 className='mb-4 custom-heading'>A Safe Space for Healing</h3>
+                {/* <img src={img3} alt="" /> */}
+                <span>Step into a safe space where healing begins.</span>
             </section>
             <section className='bgBlue'>
-                Test Section - 2
+                <h3 className='mb-4 custom-heading'>Your Journey to Wellness</h3>
+                {/* <img src={img3} alt="" /> */}
+                <span>Every step on your journey to wellness is important. We're here to guide you.</span>
             </section >
             <section className='bgGreen'>
-                Test Section - 3
+                <h3 className='mb-4 custom-heading'>Let's Start Together</h3>
+                {/* <img src={img3} alt="" /> */}
+                <span>Let's take the first step together towards a healthier, happier you. Contact us to get started.</span>
             </section>
         </div>
     </>;
