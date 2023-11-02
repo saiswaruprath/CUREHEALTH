@@ -14,6 +14,7 @@ function ResourceUploadForm() {
   let pdfUploadBtn = useRef();
   let videoUploadBtn = useRef();
   let documentUploadBtn = useRef();
+  const [filesToUpload, setFilesToUpload] = useState([]);
 
   const [resourceData, setResourceData] = useState({
     topic: "",
@@ -50,6 +51,7 @@ function ResourceUploadForm() {
       const newUploadedFiles = files.map((file) => ({
         type: fileType,
         name: file.name,
+        file: file
       }));
       setUploadedFiles((prevFiles) => [...prevFiles, ...newUploadedFiles]);
 
@@ -59,11 +61,13 @@ function ResourceUploadForm() {
         type: fileType,
         file: file,
       }));
-
+  
       setResourceData((prevData) => ({
         ...prevData,
         [fileType]: [...prevData[fileType], ...processedFiles],
       }));
+
+
     }
   };
 
@@ -81,37 +85,66 @@ function ResourceUploadForm() {
       documents: [],
       urls: [],
     });
-    setTimeout(()=>{setMessage("");},5000)
+    setTimeout(() => { setMessage(""); }, 5000)
     setUploadedFiles([]);
   };
 
   const handleSubmit = async () => {
-    try {
-      await fetch("api/upload", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(resourceData),
-      });
-
-      if (resourceData.urls.length > 0) {
-        const urlData = {
-          topic: resourceData.topic,
-          type: resourceData.type,
-          urls: resourceData.urls,
-        };
-        await axios.post("/updateUrls", urlData);
+    // Upload File
+    if (resourceData.type === "files") {
+      try {
+        for (const file of uploadedFiles) {
+          let formData = new FormData();
+          formData.append('file', file.file);
+    
+          const response = await fetch("upload-file", {
+            method: 'POST', // Explicitly set the method to POST
+            body: formData
+          });
+    
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+    
+          // Assuming the server sends back JSON data
+          const responseWithBody = await response.json(); 
+          console.log(responseWithBody);
+        }
+      } catch (error) {
+        console.error("Error uploading file data:", error);
+        setMessage("Error uploading file data!");
       }
+    }    
 
-      handleClear();
-      setMessage(
-        "Thank you for contributing! Your data was uploaded successfully!"
-      );
-      console.log("JSON data uploaded successfully.");
-    } catch (error) {
-      console.error("Error uploading JSON data:", error);
-      setMessage("Error uploading data!");
+    // Upload URL
+    if (resourceData.type === "url") {
+      try {
+        await fetch("api/upload", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(resourceData),
+        });
+
+        if (resourceData.urls.length > 0) {
+          const urlData = {
+            topic: resourceData.topic,
+            type: resourceData.type,
+            urls: resourceData.urls,
+          };
+          await axios.post("/updateUrls", urlData);
+        }
+
+        handleClear();
+        setMessage(
+          "Thank you for contributing! Your data was uploaded successfully!"
+        );
+        console.log("JSON data uploaded successfully.");
+      } catch (error) {
+        console.error("Error uploading JSON data:", error);
+        setMessage("Error uploading data!");
+      }
     }
   };
 
@@ -122,26 +155,8 @@ function ResourceUploadForm() {
         <p>
           Please provide the details for the options below and click on publish
           to add your resource.
-          {/* <br />
-          You can also search for your resource with your user ID below and
-          check the details. */}
         </p>
         <div className="row g-3 mb-3">
-          {/* <div className="form-floating col">
-            <input
-              type="text"
-              className="form-control"
-              id="formGroupResourceTopic"
-              placeholder="Enter Resource Topic"
-              aria-label="Resource Topic"
-              name="topic"
-              value={resourceData.topic}
-              onChange={handleInputChange}
-            />
-            <label htmlFor="formGroupResourceTopic" className="">
-              Resource Topic
-            </label>
-          </div> */}
           <div className="form-floating col">
             <select className="form-select" id="formGroupResourceTopic" aria-label="Resource Topic"
               name="topic" value={resourceData.topic} onChange={handleInputChange}>
@@ -161,21 +176,6 @@ function ResourceUploadForm() {
             </select>
             <label htmlFor="formGroupResourceTopic1" className="left--unset">Resource Topic</label>
           </div>
-          {/* <div className="form-floating col">
-            <input
-              type="text"
-              className="form-control"
-              id="formGroupResourceType"
-              placeholder="Enter Resource Type"
-              aria-label="Resource Type"
-              name="type"
-              value={resourceData.type}
-              onChange={handleInputChange}
-            />
-            <label htmlFor="formGroupResourceType" className="">
-              Resource Type
-            </label>
-          </div> */}
           <div className="form-floating col">
             <select className="form-select" id="formGroupResourceTopic" aria-label="Resource Type"
               name="type" value={resourceData.type} onChange={handleInputChange}>

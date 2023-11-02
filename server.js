@@ -15,6 +15,9 @@ import mongoSanitize from 'express-mongo-sanitize';
 import { Firestore  } from '@google-cloud/firestore';
 
 import {Storage } from '@google-cloud/storage';
+import Multer from "multer";
+import { format } from "util";
+
 
 const app = express();
 import dotenv from 'dotenv'
@@ -66,6 +69,12 @@ app.use((req, res, next) => {
   next();
 });
 
+const multer = Multer({
+  storage: Multer.memoryStorage(),
+  limits: {
+    fileSize: 5 * 1024 * 1024, // no larger than 5mb, you can change as needed.
+  },
+});
 
 // /// CODE FOR ARTICLE FETCH FROM DIRECT FIRESTORE BEGINS
 
@@ -77,10 +86,6 @@ import { title } from 'process';
 const serviceAccountKey = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS)
 // // Initialize Firestore
  const firestore = new Firestore({ projectId: serviceAccountKey.project_id, credentials: serviceAccountKey });
-
-
-
-
 
 // Define API endpoint for creating documents
 app.post('/api/update', async (req, res) => {
@@ -101,9 +106,6 @@ app.post('/api/update', async (req, res) => {
     res.status(500).json({ error: 'An error occurred while creating document' });
   }
 });
-
-
-
 
 app.get('/api/recent-document', async(req, res) => {
   try {
@@ -237,12 +239,6 @@ app.post('/api/upload', async (req, res) => {
   res.status(201).send('Resource uploaded successfully.');
 });
 
-
-
-
-
-
-
 app.get('/search', async (req, res) => {
   const searchUserId = req.query.userid;
   console.log('Search user ID:', searchUserId)
@@ -252,7 +248,6 @@ app.get('/search', async (req, res) => {
     const querySnapshotNew =  await firestore.collection('uploadresource')
       .where('userid', '==', searchUserId)
       .get();
-    
     
     const searchResults = [];
     querySnapshotNew.forEach((doc) => {
@@ -272,12 +267,6 @@ app.get('/search', async (req, res) => {
     res.status(500).send('Error fetching search results');
   }
 });
-
-
-
-
-
-
 
 app.get('/api/treatment-centers', async (req, res) => {
   const { lat, lng } = req.query;
@@ -330,6 +319,27 @@ app.get('/api/know-more-details', async (req, res) => {
   }
 });
 
+
+const bucketName = "ohana-website-storage";
+const bucket = storage.bucket(bucketName);
+app.post("/upload-file", multer.single("file"), function (req, res, next) {
+  if (!req.file) {
+    res.status(400).send("No file uploaded.");
+    return;
+  }
+  const blob = bucket.file(req.file.originalname);
+  const blobStream = blob.createWriteStream();
+  blobStream.on("error", (err) => {
+    next(err);
+  });
+  blobStream.on("finish", () => {
+    // The public URL can be used to directly access the file via HTTP.
+    const publicUrl = format(`https://storage.cloud.google.com/${bucket.name}/${encodeURIComponent(blob.name)}`);
+    res.status(200).json({ publicUrl });
+  });
+  blobStream.end(req.file.buffer);
+  console.log(req.file);
+});
  
 
 
@@ -351,11 +361,7 @@ app.get('*', function (request, response) {
 app.use(notFoundMiddleware)
 app.use(errorHandlerMiddleware)
 
-
 const port = process.env.PORT || 5000;
-
-
-
 
 const start =  async () =>{
     try{
