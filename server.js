@@ -186,6 +186,20 @@ app.post('/updateUrls', async (req, res) => {
 });
 
 
+app.post('/translate', async (req, res) => {
+  const { source, target, text, type } = req.body;
+
+  await firestore.collection('transaction_request').add({
+    source,
+    target,
+    text,
+    type
+  });
+
+  res.send('Uploaded successfully.');
+});
+
+
 
 // Load the Google Cloud Storage service account credentials
 const keyFile = process.env.GOOGLE_APPLICATION_CREDENTIALS

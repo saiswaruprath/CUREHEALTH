@@ -1,11 +1,34 @@
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import "./upload.css";
+import axios from "axios";
 
 const Translation = () => {
 
     const [selectedLanguageFrom, setSelectedLanguageFrom] = useState('English');
     const [selectedLanguageTo, setSelectedLanguageTo] = useState('');
+    const [translationText, setTranslationText] = useState('');
+
+    const handleTranslationClick = async() => {
+        try {
+            console.log({selectedLanguageFrom})
+            console.log({selectedLanguageTo})
+            console.log({translationText})
+
+            let payload = {
+                source: selectedLanguageFrom,
+                target: selectedLanguageTo,
+                text: translationText,
+                type: 'translate_text'
+            }
+
+            let response = await axios.post("/translate", payload);
+            if(response) console.log(response);
+
+        } catch (error) {
+            console.error("Error in the translation API:", error);
+        }
+    };
 
     const ALL_LANGUAGES_FULLFORM = [
         'Afrikaans', 'Amharic', 'Arabic', 'Armenian', 'Assamese', 'Azerbaijani', 'Basque', 'Belarusian', 'Bengali', 'Bosnian',
@@ -69,8 +92,8 @@ const Translation = () => {
                             id="formGroupTranslateText"
                             placeholder="Enter Content Here"
                             name="content"
-                            // value={resourceData.content}
-                            onChange={() => null}
+                            value={translationText}
+                            onChange={(e) => setTranslationText(e.target.value)}
                         />
                         <label htmlFor="formGroupTranslateText" className="left--unset">
                             Enter the content you need to translate:
@@ -92,7 +115,7 @@ const Translation = () => {
                         </label>
                     </div>
                 </div>
-                <Button size="lg" variant="primary ms-auto" onClick={() => null}>
+                <Button size="lg" variant="primary ms-auto" onClick={handleTranslationClick}>
                     Translate
                 </Button>
             </div>
