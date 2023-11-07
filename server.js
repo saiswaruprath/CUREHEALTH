@@ -182,8 +182,9 @@ app.post('/updateUrls', async (req, res) => {
       urls,
     });
 
-  res.send('URLs updated successfully.');
+  res.send('Uploaded successfully.');
 });
+
 
 
 // Load the Google Cloud Storage service account credentials

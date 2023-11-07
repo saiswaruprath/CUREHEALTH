@@ -15,6 +15,7 @@ function ResourceUploadForm() {
   let videoUploadBtn = useRef();
   let documentUploadBtn = useRef();
   const [filesToUpload, setFilesToUpload] = useState([]);
+  
 
   const [resourceData, setResourceData] = useState({
     topic: "",
@@ -93,6 +94,9 @@ function ResourceUploadForm() {
     // Upload File
     if (resourceData.type === "files") {
       try {
+        let public_url = [];
+        let isLastFileUploaded = false;
+        let fileUploadCount = 0;
         for (const file of uploadedFiles) {
           let formData = new FormData();
           formData.append('file', file.file);
@@ -105,10 +109,26 @@ function ResourceUploadForm() {
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
+
+          if (response.ok) {
+            fileUploadCount += 1;
+          }
+
+          if(fileUploadCount === uploadedFiles.length) isLastFileUploaded=true
     
           // Assuming the server sends back JSON data
           const responseWithBody = await response.json(); 
-          console.log(responseWithBody);
+          // console.log(responseWithBody['publicUrl']);
+          public_url.push(responseWithBody['publicUrl']);
+          if (isLastFileUploaded) {
+            console.log(public_url);
+            const FileData = {
+              topic: resourceData.topic,
+              type: "url", // Firestore accepts URL type to parse into ML model
+              urls: public_url,
+            };
+            await axios.post("/updateUrls", FileData);
+          }
         }
       } catch (error) {
         console.error("Error uploading file data:", error);

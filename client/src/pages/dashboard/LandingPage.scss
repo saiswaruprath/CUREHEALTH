@@ -33,12 +33,14 @@
     justify-content: flex-start;
     align-items: center;
     padding-top: 40px;
+    text-shadow: 1px 1px white;
 }
 .bgBlue{
     background-color: var(--primary-200);
-    background-image: url('../../assets/images/hawaii-roads.jpg');
+    background-image: url('../../assets/images/screen-2.gif');
     background-size: cover;
-    color: black;
+    color: white;
+    text-shadow: 1px 1px black;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -47,9 +49,10 @@
 }
 .bgGreen{
     background-color: var(--primary-300);
-    background-image: url('../../assets/images/office-reception-design.avif');
+    background-image: url('../../assets/images/screen3.png');
     background-size: cover;
     color: white;
+    text-shadow: 1px 1px black;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
