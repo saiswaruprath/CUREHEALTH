@@ -11,10 +11,6 @@ const Translation = () => {
 
     const handleTranslationClick = async() => {
         try {
-            console.log({selectedLanguageFrom})
-            console.log({selectedLanguageTo})
-            console.log({translationText})
-
             let payload = {
                 source: selectedLanguageFrom,
                 target: selectedLanguageTo,
