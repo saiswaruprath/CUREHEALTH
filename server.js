@@ -199,6 +199,22 @@ app.post('/translate', async (req, res) => {
   res.send('Uploaded successfully.');
 });
 
+app.get('/api/translation-results', async(req, res) => {
+  try {
+    const docRef = firestore.collection('transaction_response').doc('Qvx7ymoQaNiUNgxgxKfJ');
+    const doc = await docRef.get();
+    if (!doc.exists) {
+      res.status(404).json({ error: 'Document not found' });
+      return;
+    }
+    const data = doc.data();
+    res.json(data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 
 
 // Load the Google Cloud Storage service account credentials

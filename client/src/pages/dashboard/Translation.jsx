@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import "./upload.css";
 import axios from "axios";
@@ -8,6 +8,46 @@ const Translation = () => {
     const [selectedLanguageFrom, setSelectedLanguageFrom] = useState('English');
     const [selectedLanguageTo, setSelectedLanguageTo] = useState('');
     const [translationText, setTranslationText] = useState('');
+    const [translatedText, setTranslatedText] = useState('');
+    const [TranslationResult, setTranslationResult] = useState('');
+    const [TranslationResultLoading, setTranslationResultLoading] = useState(false);
+    const [translationPerformed, setTranslationPerformed] = useState(false);
+    const POLLING_INTERVAL = 5000;
+
+    useEffect(() => {
+        let pollTimer;
+    
+        const pollForRecentDocument = async () => {
+          try {
+            const response = await fetch('/api/translation-results');
+            const newData = await response.json();
+    
+            // Check if the new data matches the search criteria
+            // const matchingTopics = Object.keys(newData).filter(topic =>
+            //   topic.toLowerCase().includes(context.toLowerCase())
+            // );
+            const exactStringMatch = translationText + ' - ' + selectedLanguageFrom + ' - ' + selectedLanguageTo;
+            // if (matchingTopics.length > 0) {
+            if (newData[exactStringMatch]) {
+              setTranslationResult(newData);
+              setTranslatedText(newData[exactStringMatch]);
+              setTranslationResultLoading(false); // Data has been fetched, loading complete
+              clearInterval(pollTimer); // Stop polling once data is available
+            }
+          } catch (error) {
+            console.error('Error polling for recent documents:', error);
+          }
+        };
+    
+        if (translationPerformed && setTranslationResultLoading) {
+          pollTimer = setInterval(pollForRecentDocument, POLLING_INTERVAL);
+        }
+    
+        return () => {
+          clearInterval(pollTimer); // Clean up the interval when component unmounts
+        };
+    
+      }, [translationPerformed, TranslationResultLoading]);
 
     const handleTranslationClick = async() => {
         try {
@@ -17,7 +57,8 @@ const Translation = () => {
                 text: translationText,
                 type: 'translate_text'
             }
-
+            setTranslationPerformed(true);
+            setTranslationResultLoading(true);
             let response = await axios.post("/translate", payload);
             if(response) console.log(response);
 
@@ -102,9 +143,10 @@ const Translation = () => {
                             id="formGroupTranslateOutput"
                             placeholder="Enter Content Here"
                             name="content"
-                            // value={resourceData.content}
+                            value={translatedText}
                             onChange={() => null}
-                            disabled={true}
+                            disabled={false}
+                            readOnly={true}
                         />
                         <label htmlFor="formGroupTranslateOutput" className="left--unset">
                             Translated Content:
