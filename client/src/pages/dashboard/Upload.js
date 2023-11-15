@@ -114,7 +114,12 @@ function ResourceUploadForm() {
             fileUploadCount += 1;
           }
 
-          if(fileUploadCount === uploadedFiles.length) isLastFileUploaded=true
+          if(fileUploadCount === uploadedFiles.length) {
+            isLastFileUploaded=true;
+            setMessage(
+              "Thank you for contributing! Your data was uploaded successfully!"
+            );
+          }
     
           // Assuming the server sends back JSON data
           const responseWithBody = await response.json(); 

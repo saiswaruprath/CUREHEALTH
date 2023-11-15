@@ -26,7 +26,8 @@ const Translation = () => {
             // const matchingTopics = Object.keys(newData).filter(topic =>
             //   topic.toLowerCase().includes(context.toLowerCase())
             // );
-            const exactStringMatch = translationText + ' - ' + selectedLanguageFrom + ' - ' + selectedLanguageTo;
+            const translationTextInput = translationText.slice(0, 50);
+            const exactStringMatch = translationTextInput + ' - ' + selectedLanguageFrom + ' - ' + selectedLanguageTo;
             // if (matchingTopics.length > 0) {
             if (newData[exactStringMatch]) {
               setTranslationResult(newData);
