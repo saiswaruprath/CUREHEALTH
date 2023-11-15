@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Error, Landing, Register, ProtectedRoute } from './pages'
-import { AddJob, AllJobs, Profile, Stats, SharedLayout, Upload, ArticleUpdate, EditArticle, FetchArticles, ArticleDetails } from './pages/dashboard'
+import { AddJob, AllJobs, Profile, SharedLayout, Upload, EditArticle, ArticleDetails, UserHistory, Translation, UserProfile, LandingPage } from './pages/dashboard'
+// import { Stats, ArticleUpdate, FetchArticles } from './pages/dashboard'
 import { LoadScript } from '@react-google-maps/api';
-
 
 
 function App() {
   const [data, setData] = useState([]);
-  const libraries = ['places'];
   useEffect(() => {
     fetch('/api/data')
       .then(response => response.json())
@@ -39,7 +38,10 @@ function App() {
             <Route path='getcentre' element={<EditArticle />} />
             <Route path='upload' element={<Upload />} />
             <Route path="details/:itemTitle" element={<ArticleDetails data={data} />} />
-
+            <Route path='user-history' element={<UserHistory />} />
+            <Route path='user-profile' element={<UserProfile />} />
+            <Route path='translation' element={<Translation />} />
+            <Route path='landing-page' element={<LandingPage />} />
 
           </Route>
           <Route path='/register' element={<Register />} />

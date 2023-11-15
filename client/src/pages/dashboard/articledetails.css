@@ -1,16 +1,71 @@
-
-
-
-/* ButtonStyles.css */
-.button {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border-radius: 5px;
-    text-decoration: none;
-    margin: 10px;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-  }
+.details--container{
+  display: flex;
+  width: 100%;
+  margin: auto;
+  gap: 2em;
   
+}
+
+.details-header--container{
+  position: absolute;
+}
+
+.details-header{
+  display: flex;
+  background-color: var(--green-light);
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  margin-bottom: 8px;
+}
+
+.details-image--container{
+  max-width: 100%;
+  margin: 0 25px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.details-image--container img{
+  max-width: 100%;
+}
+
+.details-content--container{
+
+}
+
+.details-content--container .accordion-button {
+  font-size: 1.25rem;
+  font-family: sans-serif;
+}
+
+.details-content--container button.accordion-button:hover {
+  background-color: var(--primary-500);
+}
+
+.details-content--container p{
+  max-width: unset;
+  display: flex;
+  /* flex-direction: column; */
+}
+
+.details-content--container p strong{
+  margin-right: 4px;
+}
+
+.details-answers--container{}
+
+.max-width--unset{
+  max-width: unset;
+}
+
+.bb-1{
+  border-bottom: solid 1px;
+  margin-bottom: 8px;
+}
+
+.bb-1:last-child{
+  border-bottom: unset;
+  margin-bottom: 8px;
+}

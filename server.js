@@ -15,6 +15,9 @@ import mongoSanitize from 'express-mongo-sanitize';
 import { Firestore  } from '@google-cloud/firestore';
 
 import {Storage } from '@google-cloud/storage';
+import Multer from "multer";
+import { format } from "util";
+
 
 const app = express();
 import dotenv from 'dotenv'
@@ -43,18 +46,35 @@ if (process.env.NODE_ENV !== 'production') {
 const __dirname = dirname(fileURLToPath(import.meta.url));  
 app.use(express.static(path.join(__dirname, 'newimages')));
 app.use(express.static(path.resolve(__dirname, './client/build')));
-app.use(cors());
+app.use(cors({
+  origin: '*'
+}));
 app.use(express.json())
 
 app.use(helmet());
+app.use(
+  helmet({
+    crossOriginEmbedderPolicy: false,
+    // ...
+  })
+);
+
 app.use(xss());
 app.use(mongoSanitize());
 
 app.use((req, res, next) => {
-  res.setHeader('Content-Security-Policy', "script-src 'self' https://maps.googleapis.com");
+  res.header('Content-Security-Policy', "script-src 'self' https://maps.googleapis.com 'unsafe-inline'");
+  res.header('Access-Control-Allow-Origin', '*');
+  res.removeHeader("Cross-Origin-Embedder-Policy");
   next();
 });
 
+const multer = Multer({
+  storage: Multer.memoryStorage(),
+  limits: {
+    fileSize: 5 * 1024 * 1024, // no larger than 5mb, you can change as needed.
+  },
+});
 
 // /// CODE FOR ARTICLE FETCH FROM DIRECT FIRESTORE BEGINS
 
@@ -67,15 +87,10 @@ const serviceAccountKey = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS)
 // // Initialize Firestore
  const firestore = new Firestore({ projectId: serviceAccountKey.project_id, credentials: serviceAccountKey });
 
-
-
-
-
 // Define API endpoint for creating documents
 app.post('/api/update', async (req, res) => {
   try {
     const { type, value } = req.body;
-
     const collectionRef = firestore.collection('transaction_request');
 
     // Create a new document with appropriate fields based on the type
@@ -91,9 +106,6 @@ app.post('/api/update', async (req, res) => {
     res.status(500).json({ error: 'An error occurred while creating document' });
   }
 });
-
-
-
 
 app.get('/api/recent-document', async(req, res) => {
   try {
@@ -170,8 +182,39 @@ app.post('/updateUrls', async (req, res) => {
       urls,
     });
 
-  res.send('URLs updated successfully.');
+  res.send('Uploaded successfully.');
 });
+
+
+app.post('/translate', async (req, res) => {
+  const { source, target, text, type } = req.body;
+
+  await firestore.collection('transaction_request').add({
+    source,
+    target,
+    text,
+    type
+  });
+
+  res.send('Uploaded successfully.');
+});
+
+app.get('/api/translation-results', async(req, res) => {
+  try {
+    const docRef = firestore.collection('transaction_response').doc('Qvx7ymoQaNiUNgxgxKfJ');
+    const doc = await docRef.get();
+    if (!doc.exists) {
+      res.status(404).json({ error: 'Document not found' });
+      return;
+    }
+    const data = doc.data();
+    res.json(data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 
 
 // Load the Google Cloud Storage service account credentials
@@ -227,12 +270,6 @@ app.post('/api/upload', async (req, res) => {
   res.status(201).send('Resource uploaded successfully.');
 });
 
-
-
-
-
-
-
 app.get('/search', async (req, res) => {
   const searchUserId = req.query.userid;
   console.log('Search user ID:', searchUserId)
@@ -242,7 +279,6 @@ app.get('/search', async (req, res) => {
     const querySnapshotNew =  await firestore.collection('uploadresource')
       .where('userid', '==', searchUserId)
       .get();
-    
     
     const searchResults = [];
     querySnapshotNew.forEach((doc) => {
@@ -263,25 +299,15 @@ app.get('/search', async (req, res) => {
   }
 });
 
-
-
-
-
-
-
 app.get('/api/treatment-centers', async (req, res) => {
   const { lat, lng } = req.query;
   const radius = 5000; // Specify the radius within which to search for treatment centers (in meters)
-  const apiKey = 'AIzaSyBGcMB5sQ7MZ7RpRLCWKqEdHzI3qj70EBM';
-
+  const apiKey = 'AIzaSyBIQlGq1fABBG_lC0dqDGVJ68fITqF1QLU';
+  res.set('Access-Control-Allow-Origin','*');
   try {
    
-
-   
     let url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&type=health&keyword=treatment&key=${apiKey}`;
-
     const response = await fetch(url);
-    
     const data = await response.json();
 
     // Extract the treatment center details from the response
@@ -304,6 +330,47 @@ app.get('/api/treatment-centers', async (req, res) => {
   }
 });
 
+app.get('/api/know-more-details', async (req, res) => {
+  const { lat, lng } = req.query;
+  const { user_input } = req.query;
+  res.set('Access-Control-Allow-Origin', '*');
+  const radius = 5000; // Specify the radius within which to search for treatment centers (in meters)
+  const apiKey = 'AIzaSyBIQlGq1fABBG_lC0dqDGVJ68fITqF1QLU';
+  try {
+    let url = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?fields=formatted_address%2Cname%2Crating%2Copening_hours%2Cgeometry&input=${user_input}&inputtype=textquery&locationbias=circle%3A${radius}%40${lat}%2C${lng}&key=${apiKey}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    // Extract the treatment center details from the response
+    const singleTreatmentCenter = data;
+    res.json({ results: singleTreatmentCenter });
+    console.log(singleTreatmentCenter)
+  } catch (error) {
+    console.error('Error retrieving specific treatment centers:', error);
+    res.status(500).json({ error: 'Failed to retrieve treatment centers details' });
+  }
+});
+
+
+const bucketName = "ohana-website-storage";
+const bucket = storage.bucket(bucketName);
+app.post("/upload-file", multer.single("file"), function (req, res, next) {
+  if (!req.file) {
+    res.status(400).send("No file uploaded.");
+    return;
+  }
+  const blob = bucket.file(req.file.originalname);
+  const blobStream = blob.createWriteStream();
+  blobStream.on("error", (err) => {
+    next(err);
+  });
+  blobStream.on("finish", () => {
+    // The public URL can be used to directly access the file via HTTP.
+    const publicUrl = format(`https://storage.cloud.google.com/${bucket.name}/${encodeURIComponent(blob.name)}`);
+    res.status(200).json({ publicUrl });
+  });
+  blobStream.end(req.file.buffer);
+  console.log(req.file);
+});
  
 
 
@@ -325,11 +392,7 @@ app.get('*', function (request, response) {
 app.use(notFoundMiddleware)
 app.use(errorHandlerMiddleware)
 
-
 const port = process.env.PORT || 5000;
-
-
-
 
 const start =  async () =>{
     try{

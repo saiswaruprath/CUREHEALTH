@@ -1,7 +1,6 @@
-import { IoBarChartSharp } from 'react-icons/io5';
-import { MdQueryStats } from 'react-icons/md';
-import { FaWpforms } from 'react-icons/fa';
-import { ImProfile } from 'react-icons/im';
+import { ImHome,ImHistory,ImPushpin,ImUpload,ImSearch } from 'react-icons/im';
+import { BsTranslate } from "react-icons/bs";
+
 
 const links = [
     // {
@@ -17,10 +16,29 @@ const links = [
     //   icon: <MdQueryStats />,
     // },
     {
+      id: 7,
+      text: 'Dashboard',
+      path: 'landing-page',
+      icon: <ImHome />,
+    }, 
+    {
       id: 1,
-      text: 'Find Treatment Centre',
+      text: 'Find Centres',
       path: 'add-job',
-      icon: <FaWpforms />,
+      icon: <ImPushpin />,
+    },    
+    
+    {
+      id: 2,
+      text: 'Search Resources',
+      path: 'getcentre',
+      icon: <ImSearch />,
+    },
+    {
+      id: 3,
+      text: 'Upload Articles ',
+      path: 'upload',
+      icon: <ImUpload />,
     },
     // {
     //   id: 4,
@@ -28,23 +46,17 @@ const links = [
     //   path: 'profile',
     //   icon: <ImProfile />,
     // },
-    // {
-    //   id: 5,
-    //   text: 'contact',
-    //   path: 'profile',
-    //   icon: <ImProfile />,
-    // },
     {
-      id: 2,
-      text: 'Search/Filter Resources',
-      path: 'getcentre',
-      icon: <ImProfile />,
+      id: 5,
+      text: 'User History',
+      path: 'user-history',
+      icon: <ImHistory />,
     },
     {
-      id: 3,
-      text: 'Upload Resources',
-      path: 'upload',
-      icon: <ImProfile />,
+      id: 6,
+      text: 'Translation',
+      path: 'translation',
+      icon: <BsTranslate />,
     },
   ];
   

@@ -3,9 +3,12 @@ import { FaAlignLeft, FaUserCircle, FaCaretDown } from 'react-icons/fa';
 import { useAppContext } from '../context/appContext';
 import Logo from './Logo';
 import Wrapper from '../assets/wrappers/Navbar';
+import { Link } from 'react-router-dom';
+
+
 const Navbar = () => {
-    const [showLogout, setShowLogout] = useState(false)
-    const { toggleSidebar, logoutUser, user } = useAppContext();
+  const [showLogout, setShowLogout] = useState(false)
+  const { toggleSidebar, logoutUser, user } = useAppContext();
   return (
     <Wrapper>
       <div className='nav-center'>
@@ -18,21 +21,22 @@ const Navbar = () => {
 
         <div>
           <Logo />
-          <h3 className='logo-text'>dashboard</h3>
+          <h3 className='logo-text d-none'>dashboard</h3>
         </div>
 
         <div className='btn-container'>
-          <button className='btn' onClick={() => setShowLogout(!showLogout) }>
+          <button className='btn' onClick={() => setShowLogout(!showLogout)}>
             <FaUserCircle />
             {user?.name}
             <FaCaretDown />
           </button>
-          <div className={showLogout ? 'dropdwon show-dropdown' : 'dropdown'}>
-            <button
-              className='dropdown-btn'
-              onClick={logoutUser}
-              
-            >
+          <div className={showLogout ? 'dropdown show-dropdown' : 'dropdown'}>
+            <Link to={`/user-profile`} onClick={() => setShowLogout(!showLogout)}>
+              <button className='dropdown-btn'>
+                Profile
+              </button>
+            </Link>
+            <button className='dropdown-btn' onClick={logoutUser} >
               logout
             </button>
           </div>

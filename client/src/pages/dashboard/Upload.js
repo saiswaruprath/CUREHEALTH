@@ -9,28 +9,13 @@ import Stack from "react-bootstrap/Stack";
 function ResourceUploadForm() {
   const [message, setMessage] = useState("");
   const [uploadedFiles, setUploadedFiles] = useState([]);
-  const [searchEmail, setSearchEmail] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
 
   let imageUploadBtn = useRef();
   let pdfUploadBtn = useRef();
   let videoUploadBtn = useRef();
   let documentUploadBtn = useRef();
-
-  const handleSearchInputChange = (event) => {
-    setSearchEmail(event.target.value);
-  };
-
-  const handleSearchSubmit = async () => {
-    try {
-      const response = await fetch(`/search?userid=${searchEmail}`);
-      const data = await response.json();
-      setSearchResults(data);
-      console.log(data);
-    } catch (error) {
-      console.error("Error fetching search results:", error);
-    }
-  };
+  const [filesToUpload, setFilesToUpload] = useState([]);
+  
 
   const [resourceData, setResourceData] = useState({
     topic: "",
@@ -67,6 +52,7 @@ function ResourceUploadForm() {
       const newUploadedFiles = files.map((file) => ({
         type: fileType,
         name: file.name,
+        file: file
       }));
       setUploadedFiles((prevFiles) => [...prevFiles, ...newUploadedFiles]);
 
@@ -76,15 +62,18 @@ function ResourceUploadForm() {
         type: fileType,
         file: file,
       }));
-
+  
       setResourceData((prevData) => ({
         ...prevData,
         [fileType]: [...prevData[fileType], ...processedFiles],
       }));
+
+
     }
   };
 
   const handleClear = () => {
+    setMessage("All fields have been cleared.");
     setResourceData({
       topic: "",
       type: "",
@@ -97,37 +86,90 @@ function ResourceUploadForm() {
       documents: [],
       urls: [],
     });
-    setMessage("");
+    setTimeout(() => { setMessage(""); }, 5000)
     setUploadedFiles([]);
   };
 
   const handleSubmit = async () => {
-    try {
-      await fetch("api/upload", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(resourceData),
-      });
+    // Upload File
+    if (resourceData.type === "files") {
+      try {
+        let public_url = [];
+        let isLastFileUploaded = false;
+        let fileUploadCount = 0;
+        for (const file of uploadedFiles) {
+          let formData = new FormData();
+          formData.append('file', file.file);
+    
+          const response = await fetch("upload-file", {
+            method: 'POST', // Explicitly set the method to POST
+            body: formData
+          });
+    
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
 
-      if (resourceData.urls.length > 0) {
-        const urlData = {
-          topic: resourceData.topic,
-          type: resourceData.type,
-          urls: resourceData.urls,
-        };
-        await axios.post("/updateUrls", urlData);
+          if (response.ok) {
+            fileUploadCount += 1;
+          }
+
+          if(fileUploadCount === uploadedFiles.length) {
+            isLastFileUploaded=true;
+            setMessage(
+              "Thank you for contributing! Your data was uploaded successfully!"
+            );
+          }
+    
+          // Assuming the server sends back JSON data
+          const responseWithBody = await response.json(); 
+          // console.log(responseWithBody['publicUrl']);
+          public_url.push(responseWithBody['publicUrl']);
+          if (isLastFileUploaded) {
+            console.log(public_url);
+            const FileData = {
+              topic: resourceData.topic,
+              type: "url", // Firestore accepts URL type to parse into ML model
+              urls: public_url,
+            };
+            await axios.post("/updateUrls", FileData);
+          }
+        }
+      } catch (error) {
+        console.error("Error uploading file data:", error);
+        setMessage("Error uploading file data!");
       }
+    }    
 
-      handleClear();
-      setMessage(
-        "Thank you for contributing! Your data was uploaded successfully!"
-      );
-      console.log("JSON data uploaded successfully.");
-    } catch (error) {
-      console.error("Error uploading JSON data:", error);
-      setMessage("Error uploading data!");
+    // Upload URL
+    if (resourceData.type === "url") {
+      try {
+        await fetch("api/upload", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(resourceData),
+        });
+
+        if (resourceData.urls.length > 0) {
+          const urlData = {
+            topic: resourceData.topic,
+            type: resourceData.type,
+            urls: resourceData.urls,
+          };
+          await axios.post("/updateUrls", urlData);
+        }
+
+        handleClear();
+        setMessage(
+          "Thank you for contributing! Your data was uploaded successfully!"
+        );
+        console.log("JSON data uploaded successfully.");
+      } catch (error) {
+        console.error("Error uploading JSON data:", error);
+        setMessage("Error uploading data!");
+      }
     }
   };
 
@@ -138,70 +180,67 @@ function ResourceUploadForm() {
         <p>
           Please provide the details for the options below and click on publish
           to add your resource.
-          <br />
-          You can also search for your resource with your user ID below and
-          check the details.
         </p>
-
         <div className="row g-3 mb-3">
           <div className="form-floating col">
-            <input
-              type="text"
-              className="form-control"
-              id="formGroupResourceTopic"
-              placeholder="Enter Resource Topic"
-              aria-label="Resource Topic"
-              name="topic"
-              value={resourceData.topic}
-              onChange={handleInputChange}
-            />
-            <label htmlFor="formGroupResourceTopic" className="">
-              Resource Topic
-            </label>
+            <select className="form-select" id="formGroupResourceTopic" aria-label="Resource Topic"
+              name="topic" value={resourceData.topic} onChange={handleInputChange}>
+              <option value="0" disabled>Choose the Resource Topic from below:</option>
+              <option value="0" hidden>Choose a Resource Topic</option>
+              <option value="Resource Guides">Resource Guides</option>
+              <option value="Mental Health">Mental Health</option>
+              <option value="Domestic Violence">Domestic Violence</option>
+              <option value="Substance Use">Substance Use</option>
+              <option value="Native Hawaiians">Native Hawaiians</option>
+              <option value="Pacific Islanders">Pacific Islanders</option>
+              <option value="Asian Americans">Asian Americans</option>
+              <option value="Government Orgs">Government Orgs</option>
+              <option value="Other Behavioral Health">Other Behavioral Health</option>
+              <option value="Multi-Language or Translation">Multi-Language or Translation</option>
+              <option value="Other">Other</option>
+            </select>
+            <label htmlFor="formGroupResourceTopic1" className="left--unset">Resource Topic</label>
           </div>
           <div className="form-floating col">
+            <select className="form-select" id="formGroupResourceTopic" aria-label="Resource Type"
+              name="type" value={resourceData.type} onChange={handleInputChange}>
+              <option value="0" disabled>Choose the Resource Type from below:</option>
+              <option value="0" hidden>Choose a Resource Type</option>
+              <option value="url">URL's</option>
+              <option value="files">File Upload</option>
+              <option value="content">Tags & Content</option>
+            </select>
+            <label htmlFor="formGroupResourceTopic1" className="left--unset">Upload Type</label>
+          </div>
+        </div>
+        {resourceData.type === "content" && <>
+          <div className="form-floating col-12 mb-3">
             <input
               type="text"
               className="form-control"
-              id="formGroupResourceType"
-              placeholder="Enter Resource Type"
-              aria-label="Resource Type"
-              name="type"
-              value={resourceData.type}
+              id="formGroupSubject"
+              placeholder="Enter Subject Here"
+              name="subject"
+              value={resourceData.subject}
               onChange={handleInputChange}
             />
-            <label htmlFor="formGroupResourceType" className="">
-              Resource Type
+            <label htmlFor="formGroupSubject" className="">
+              Tags
             </label>
           </div>
-        </div>
-        <div className="form-floating col-12 mb-3">
-          <input
-            type="text"
-            className="form-control"
-            id="formGroupSubject"
-            placeholder="Enter Subject Here"
-            name="subject"
-            value={resourceData.subject}
-            onChange={handleInputChange}
-          />
-          <label htmlFor="formGroupSubject" className="">
-            Subject
-          </label>
-        </div>
-        <div className="form-floating col-12 mb-3">
-          <textarea
-            className="min-height--75 form-control"
-            id="formGroupContent"
-            placeholder="Enter Content Here"
-            name="content"
-            value={resourceData.content}
-            onChange={handleInputChange}
-          />
-          <label htmlFor="formGroupContent" className="form-label">
-            Content
-          </label>
-        </div>
+          <div className="form-floating col-12 mb-3">
+            <textarea
+              className="min-height--75 form-control"
+              id="formGroupContent"
+              placeholder="Enter Content Here"
+              name="content"
+              value={resourceData.content}
+              onChange={handleInputChange}
+            />
+            <label htmlFor="formGroupContent" className="form-label">
+              Content
+            </label>
+          </div></>}
         <div className="form-floating col-12 mb-3">
           <input
             type="text"
@@ -217,62 +256,65 @@ function ResourceUploadForm() {
           </label>
         </div>
 
-        <InputGroup size="md" className="mt-2 mb-3">
-          <InputGroup.Text id="search-input-group">
-            <i className="bi bi-upload"></i>
-          </InputGroup.Text>
-          <Form.Control
-            aria-label="Upload box"
-            aria-describedby="inputGroup-sizing-sm"
-            disabled={true}
-            placeholder="Select File Type to Upload:"
-          />
-          <Button
-            variant="outline-primary"
-            id="upload-image-button"
-            className="z-0"
-            onClick={(e) => imageUploadBtn.current?.click()}
-          >
-            <i className="far fa-image"></i> Images
-          </Button>
-          <Button
-            variant="outline-primary"
-            id="upload-pdf-button"
-            className="z-0"
-            onClick={(e) => pdfUploadBtn.current?.click()}
-          >
-            <i className="far fa-file-alt"></i> PDF's
-          </Button>
-          <Button
-            variant="outline-primary"
-            id="upload-video-button"
-            className="z-0"
-            onClick={(e) => videoUploadBtn.current?.click()}
-          >
-            <i className="far fa-file-video"></i> Videos
-          </Button>
-          <Button
-            variant="outline-primary"
-            id="upload-doc-button"
-            className="z-0"
-            onClick={(e) => documentUploadBtn.current?.click()}
-          >
-            <i className="far fa-file"></i> Documents
-          </Button>
-        </InputGroup>
+        {resourceData.type === "files" && <>
+          <InputGroup size="md" className="mt-2 mb-3">
+            <InputGroup.Text id="search-input-group">
+              <i className="bi bi-upload"></i>
+            </InputGroup.Text>
+            <Form.Control
+              aria-label="Upload box"
+              aria-describedby="inputGroup-sizing-sm"
+              disabled={true}
+              placeholder="Select File Type to Upload:"
+            />
+            <Button
+              variant="outline-primary"
+              id="upload-image-button"
+              className="z-0"
+              onClick={(e) => imageUploadBtn.current?.click()}
+            >
+              <i className="far fa-image"></i> Images
+            </Button>
+            <Button
+              variant="outline-primary"
+              id="upload-pdf-button"
+              className="z-0"
+              onClick={(e) => pdfUploadBtn.current?.click()}
+            >
+              <i className="far fa-file-alt"></i> PDF's
+            </Button>
+            <Button
+              variant="outline-primary"
+              id="upload-video-button"
+              className="z-0"
+              onClick={(e) => videoUploadBtn.current?.click()}
+            >
+              <i className="far fa-file-video"></i> Videos
+            </Button>
+            <Button
+              variant="outline-primary"
+              id="upload-doc-button"
+              className="z-0"
+              onClick={(e) => documentUploadBtn.current?.click()}
+            >
+              <i className="far fa-file"></i> Documents
+            </Button>
+          </InputGroup>
+        </>}
 
-        <div className="form-floating col-12 mb-4">
-          <textarea
-            className="form-control"
-            id="formGroupUrl"
-            placeholder="Enter URL Here"
-            name="url"
-            onChange={(e) => handleFileChange(e, "urls")}
-          />
-          <label htmlFor="formGroupContent" className="form-label">
-            URL's (multiple URL's to separated by commas)
-          </label>
-        </div>
+        {resourceData.type === "url" && <>
+          <div className="form-floating col-12 mb-4">
+            <textarea
+              className="form-control"
+              id="formGroupUrl"
+              placeholder="Enter URL Here"
+              name="url"
+              onChange={(e) => handleFileChange(e, "urls")}
+            />
+            <label htmlFor="formGroupContent" className="form-label">
+              URL's (separated by commas)
+            </label>
+          </div></>}
 
         <div className="form-group">
           <div className="file-upload-icons d-none">
@@ -340,7 +382,7 @@ function ResourceUploadForm() {
             </label>
           </div>
           <div className="uploaded-files">
-            {uploadedFiles.length != 0 && (
+            {uploadedFiles.length !== 0 && (
               <>
                 <h4>Uploaded Files:</h4>
               </>
@@ -360,142 +402,10 @@ function ResourceUploadForm() {
             </Button>
           </Stack>
 
-          {message && <p>{message}</p>}
+          {message && <p className="toaster-btm slide-in-bottom-then-hide">{message}</p>}
         </div>
       </div>
-        <div className="search-section">
-          <h2>User's History</h2>
-          <div className="container mb-4">
-          {/* <label htmlFor="searchEmail">Enter UserID and click on Search</label>
-        <input
-          type="email"
-          id="searchEmail"
-          value={searchEmail}
-          onChange={handleSearchInputChange}
-        />
-        <button onClick={handleSearchSubmit}>Search</button> */}
-          <InputGroup size="md" className="mt-2">
-            <InputGroup.Text id="search-input-group font-weight-bold">
-              User ID / Email :
-            </InputGroup.Text>
-            <Form.Control
-              aria-label="Search Box"
-              aria-describedby="inputGroup-sizing-sm"
-              value={searchEmail}
-              onChange={handleSearchInputChange}
-            />
-            <Button
-              size="lg"
-              variant="primary"
-              id="search-button"
-              className="z-0"
-              onClick={handleSearchSubmit}
-            >
-              Search
-            </Button>
-          </InputGroup>
-        
-
-        {searchResults.length > 0 && (
-          <div classname="search-results-container">
-            <h3>Search Results:</h3>
-            <ul>
-              {searchResults.map((result) => (
-                <li key={result.userid} className="search-results-card">
-                  <h3>
-                    <strong>User ID:</strong> {result.userid}
-                  </h3>
-                  <h3>
-                    <strong>Topic:</strong> {result.topic}
-                  </h3>
-                  <h3>
-                    <strong>Type:</strong> {result.type}
-                  </h3>
-                  <p>
-                    <strong>Subject:</strong> {result.subject}
-                  </p>
-                  <p>
-                    <strong>Content:</strong> {result.content}
-                  </p>
-                  <p>
-                    <strong>Date:</strong> {result.date}
-                  </p>
-                  <p>
-                    <strong>Timestamp:</strong> {result.time}
-                  </p>
-
-                  {result.urls.length > 0 && (
-                    <div>
-                      <p>
-                        <strong>URLs:</strong>
-                      </p>
-                      <ul>
-                        {result.urls.map((url) => (
-                          <li key={url}>{url}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {result.images.length > 0 && (
-                    <div>
-                      <p>
-                        <strong>Images:</strong>
-                      </p>
-                      <ul>
-                        {result.images.map((image) => (
-                          <li key={image.name}>{image.name}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {result.pdfs.length > 0 && (
-                    <div>
-                      <p>
-                        <strong>PDFs:</strong>
-                      </p>
-                      <ul>
-                        {result.pdfs.map((pdf) => (
-                          <li key={pdf.name}>{pdf.name}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {result.videos.length > 0 && (
-                    <div>
-                      <p>
-                        <strong>Videos:</strong>
-                      </p>
-                      <ul>
-                        {result.videos.map((video) => (
-                          <li key={video.name}>{video.name}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {result.documents.length > 0 && (
-                    <div>
-                      <p>
-                        <strong>Documents:</strong>
-                      </p>
-                      <ul>
-                        {result.documents.map((document) => (
-                          <li key={document.name}>{document.name}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-        </div>
-      </div>
-    </div>
+    </div >
   );
 }
 

@@ -1,7 +1,8 @@
 import React, { useRef, useState } from 'react';
-import { GoogleMap, Marker, InfoWindow, Autocomplete, useLoadScript } from '@react-google-maps/api';
+import { GoogleMap, Marker, InfoWindow, Autocomplete } from '@react-google-maps/api';
 import { Card, ListGroup } from 'react-bootstrap';
 import './MapContainer.css'; 
+import noimg from '../assets/images/no-img.png'
 
 const containerStyle = {
   display: 'flex',
@@ -41,6 +42,7 @@ const MapContainer = () => {
 
   // var [selectedLocation, setSelectedLocation] = useRef(null);
   var selectedLocation = useRef();
+  // eslint-disable-next-line no-unused-vars
   var viewModeRef = useRef();
   const [center] = useState({ lat: 39.8283, lng: -98.5795 });
 
@@ -86,16 +88,13 @@ const MapContainer = () => {
   };
 
   const showPlaceDetails = async (place) => {
-    console.log(place);
-    const { lat, lng } = place.position;
-    const user_input = place.name;
-    const response = await fetch(`http://localhost:3000/api/know-more-details?lat=${lat}&lng=${lng}&user_input=${user_input}`);
-    const data = await response.json();
-
+    // const { lat, lng } = place.position;
+    // const user_input = place.name;
+    // const response = await fetch(`/api/know-more-details?lat=${lat}&lng=${lng}&user_input=${user_input}`);
+    // const data = await response.json();
     map.panTo(place.position);
     map.setZoom(15);
     setSelectedMarker(place);
-
   };
 
   const renderViewMode = (viewModeInput) => {
@@ -111,8 +110,7 @@ const MapContainer = () => {
 
 
     try {
-      const response = await fetch(`http://localhost:3000/api/treatment-centers?lat=${lat}&lng=${lng}`);
-
+      const response = await fetch(`/api/treatment-centers?lat=${lat}&lng=${lng}`);
       const data = await response.json();
 
       // Extract the coordinates of nearby treatment centers from the response
@@ -186,7 +184,7 @@ const MapContainer = () => {
           <h3>Search Treatment Center</h3>
         </div>
       </div>
-      {viewMode == 'interactive' ? <><div className='findtreatment-container'>
+      {viewMode === 'interactive' ? <><div className='findtreatment-container'>
         <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={3.5} onClick={handleMapClick} onLoad={map => setMap(map)}>
           {markers.map((marker, index) => (
             <Marker
@@ -276,14 +274,14 @@ const MapContainer = () => {
               <option value="health">Opioid Treatment Programs</option>
             </select>
           </div>
-          <div className='findtreatment-result--filter'>
+          {/* <div className='findtreatment-result--filter'>
             <label htmlFor="filter-type">Filter by:</label>
             <select id="filter-type" onChange={handleFilterChange}>
               <option value="">Choose a Facility Operation(Default: All)</option>
               <option value="topic">Public</option>
               <option value="topic">Private</option>
             </select>
-          </div>
+          </div> */}
           {/* <div className='findtreatment-location--action'>
               <button>Search</button>
             </div> */}
@@ -296,16 +294,15 @@ const MapContainer = () => {
           </div>
           <div className="findtreatment-result--title-caption">
             {markers.length !== 0 ? <i>{markers.length} results found</i> : <div></div>}
-            <br /><br />
           </div>
           <div className="findtreatment-result--list-wrapper">
-            {markers.map(function (e) {
+            {markers.map(function (e,index) {
               return <>
-                <Card style={{ width: '30%' }}>
+                <Card style={{ width: '30%' }} key={index}>
                   <Card.Body>
                     <Card.Title>{e.name}</Card.Title>
                     <Card.Subtitle className="mb-2 text-muted">{e.address}</Card.Subtitle>
-                    {e.photos[0] !== undefined ? <Card.Img variant="top" src={`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${e.photos[0]?.photo_reference}&key=AIzaSyBIQlGq1fABBG_lC0dqDGVJ68fITqF1QLU`} className='card-photo--present' /> : <div className='card-photo--none'><b>No photos found!</b></div>}
+                    {e.photos[0] !== undefined ? <Card.Img variant="top" src={`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${e.photos[0]?.photo_reference}&key=AIzaSyBIQlGq1fABBG_lC0dqDGVJ68fITqF1QLU`} className='card-photo--present' /> : <Card.Img variant="top" src={noimg} height={200} className='border-bottom--075 min-height--50' />}
                     {/* <Card.Text>
                     Some quick example text to build on the card title.
                   </Card.Text> */}
@@ -323,7 +320,7 @@ const MapContainer = () => {
           </div>
         </div></> : null}
 
-      {viewMode == 'map' ? <><div className='findtreatment-container--mapView'>
+      {viewMode === 'map' ? <><div className='findtreatment-container--mapView'>
         <GoogleMap
           mapContainerStyle={containerStyle_fullView}
           center={center}
@@ -381,21 +378,21 @@ const MapContainer = () => {
               <br /><br />
             </div>
             <div className="findtreatment-result--list-wrapper">
-              {markers.map(function (e) {
+              {markers.map(function (e,index) {
                 return <>
-                  <div class="container p-0">
-                    <div class="card flex-row min-height-100">
-                      <div class="card-header border-0 p-0">
+                  <div className="container p-0" key={index}>
+                    <div className="card flex-row min-height-100">
+                      <div className="card-header border-0 p-0">
                         {e.photos[0] !== undefined ? <Card.Img variant="right" src={`https://maps.googleapis.com/maps/api/place/photo?maxwidth=150&photoreference=${e.photos[0]?.photo_reference}&key=AIzaSyBIQlGq1fABBG_lC0dqDGVJ68fITqF1QLU`} className='card-photo--mpresent mr-1' /> : <div className='card-photo--mnone m-1'><b>No photos found!</b></div>}
                       </div>
-                      <div class="card-block p-0 w-100">
-                        {/* <h4 class="card-title text-truncate max-width--250">{e.name}</h4> */}
-                        {/* <p class="card-text mb-2 text-muted text-truncate max-width--250">{e.address}</p> */}
+                      <div className="card-block p-0 w-100">
+                        {/* <h4 className="card-title text-truncate max-width--250">{e.name}</h4> */}
+                        {/* <p className="card-text mb-2 text-muted text-truncate max-width--250">{e.address}</p> */}
                         <Card.Title className='px-2'>{e.name}</Card.Title>
                         <Card.Subtitle className="px-2 mb-2 text-muted">{e.address}</Card.Subtitle>
-                        <a href="#" class="btn btn-primary btn-sm flex flex-row know-more-btn" onClick={() => { showPlaceDetails(e) }}><i class="bi bi-info-circle"></i>Know More</a>
+                        <button className="btn btn-primary btn-sm flex flex-row know-more-btn" onClick={() => { showPlaceDetails(e) }}><i className="bi bi-info-circle"></i>go to</button>
                       </div>
-                      {/* <div class="card-footer w-100 text-muted">
+                      {/* <div className="card-footer w-100 text-muted">
                         Is it Open Now? {e.openingHours === 'Open' ? 'Yes' : 'No'}
                       </div> */}
                     </div>
